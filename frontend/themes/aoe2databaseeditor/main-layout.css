@@ -68,6 +68,19 @@
   display: flex;
   height: var(--lumo-size-xl);
   width: 100%;
+  background-color: azure;
+}
+
+.undo-redo-icon{
+    width: 30px;
+    height: 30px;
+}
+
+
+.undo-redo-button{
+    color: blue;
+    cursor: pointer;
+    background: none;
 }
 
 .view-toggle {
