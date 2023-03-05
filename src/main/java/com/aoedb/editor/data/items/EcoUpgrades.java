@@ -1,15 +1,10 @@
 package com.aoedb.editor.data.items;
 
-
 import java.util.List;
 
-public class EcoUpgrades extends Editable {
+public class EcoUpgrades {
 
     private List<Integer> upgrades;
-
-    public EcoUpgrades(int id) {
-        super(id);
-    }
 
     public List<Integer> getUpgrades() {
         return upgrades;

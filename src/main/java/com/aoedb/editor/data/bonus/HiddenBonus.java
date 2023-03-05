@@ -1,5 +1,7 @@
 package com.aoedb.editor.data.bonus;
 
+import com.aoedb.editor.database.Database;
+
 public class HiddenBonus extends Bonus{
 
     public HiddenBonus(int id) {
@@ -7,9 +9,13 @@ public class HiddenBonus extends Bonus{
     }
 
     @Override
-    protected String getNamePattern() {
+    public String getName() {
         return String.format("hidden_bonus_name_%d", this.id);
     }
 
+    @Override
+    public String getType(){
+        return Database.HIDDEN_BONUS;
+    }
 
 }

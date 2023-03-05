@@ -1,11 +1,19 @@
 package com.aoedb.editor.data.items;
 
 
+import com.aoedb.editor.data.simple.Editable;
+import com.aoedb.editor.database.Database;
+
 public class Stat extends Editable {
-    boolean addition;
+    private Boolean addition;
 
     public Stat(int id) {
         super(id);
+    }
+
+    @Override
+    public String getName(){
+        return String.format("stat_name_%d", this.id);
     }
 
     public boolean isAddition() {
@@ -14,5 +22,10 @@ public class Stat extends Editable {
 
     public void setAddition(boolean addition) {
         this.addition = addition;
+    }
+
+    @Override
+    public String getType(){
+        return Database.STAT;
     }
 }

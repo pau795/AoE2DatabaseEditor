@@ -1,21 +1,26 @@
 package com.aoedb.editor.data.entity;
 
 import com.aoedb.editor.data.components.Trainable;
+import com.aoedb.editor.database.Database;
 
 public class Building extends Item{
-    int requiredBuilding;
+    private Integer requiredBuilding;
 
-    Trainable trainable;
+    private Trainable trainable;
 
     public Building(int id) {
         super(id);
     }
 
     @Override
-    protected String getNamePattern(){
+    public String getName(){
         return String.format("building_name_%d", this.id);
     }
 
+    @Override
+    public String getType(){
+        return Database.BUILDING;
+    }
 
     public int getRequiredBuilding() {
         return requiredBuilding;

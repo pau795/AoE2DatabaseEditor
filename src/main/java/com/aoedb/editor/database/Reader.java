@@ -5,8 +5,6 @@ import com.aoedb.editor.data.bonus.CivBonus;
 import com.aoedb.editor.data.bonus.HiddenBonus;
 import com.aoedb.editor.data.components.Upgrades.UpgradeList;
 import com.aoedb.editor.data.items.*;
-import com.aoedb.editor.data.items.TypeValues.TypeList;
-import com.aoedb.editor.data.items.TypeValues.TypeElement;
 import com.aoedb.editor.data.components.BonusEffectContainer.EffectItem;
 import com.aoedb.editor.data.entity.Building;
 import com.aoedb.editor.data.entity.Civilization;
@@ -17,6 +15,7 @@ import com.aoedb.editor.data.items.GroupContainer.GroupCategory;
 import com.aoedb.editor.data.components.*;
 import com.aoedb.editor.data.entity.Technology;
 import com.aoedb.editor.data.entity.Unit;
+import com.aoedb.editor.data.simple.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Reader {
 
@@ -65,9 +65,27 @@ public class Reader {
         return stringData;
     }
 
+    public List<Editable>  readEditableList(String type) {
+        List<Editable> b = new ArrayList<>();
+        try{
+            String file = Utils.getFileName(type);
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(getPath(file));
+            NodeList list = doc.getElementsByTagName("item");
+            for (int i = 0; i < list.getLength(); ++i) {
+                Editable e =  new TauntElement(i + 1);
+                b.add(e);
+            }
+        }
+        catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
 
-    public <T extends Editable> List<T>  readList() {
-        List<T> b = new ArrayList<>();
+    public List<ImageEditable>  readImageEditableList(String type) {
+        List<ImageEditable> b = new ArrayList<>();
         try{
             String file = Utils.getFileName(type);
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -77,8 +95,23 @@ public class Reader {
 
             for (int i = 0; i < list.getLength(); ++i) {
                 Element element = (Element) list.item(i);
-                Editable e  = r.readEditable(element, type);
-                b.add((T)e);
+                ImageEditable e;
+                switch (type){
+                    case Database.CLASS:
+                        e = new ClassElement(i + 1);
+                        break;
+                    case Database.HISTORY:
+                        e = new HistoryElement(i + 1);
+                        break;
+                    case Database.PERFORMANCE:
+                        e = new PerformanceElement(i + 1);
+                        break;
+                    default:
+                        e = new TypeElement(i + 1);
+                        break;
+                }
+                e.setImagePath(element.getAttribute("image"));
+                b.add(e);
             }
         }
         catch (ParserConfigurationException | IOException | SAXException e) {
@@ -86,7 +119,6 @@ public class Reader {
         }
         return b;
     }
-
 
     public List<Bonus> readBonuses(String type){
         try{
@@ -99,7 +131,6 @@ public class Reader {
             Document doc = docBuilder.parse(getPath(file));
             NodeList list = doc.getElementsByTagName("item");
             for (int i = 0; i < list.getLength(); ++i) {
-                Element element = (Element) list.item(i);
                 Bonus bonus = type.equals(Database.BONUS) ? new CivBonus(i + 1) : new HiddenBonus(i + 1);
                 bonus.setBonusEffect(effects.get(i));
                 bonusList.add(bonus);
@@ -111,6 +142,98 @@ public class Reader {
         return new ArrayList<>();
     }
 
+    public List<Stat> readStats(){
+        List<Stat> b = new ArrayList<>();
+        try{
+            String file = Utils.getFileName(Database.STAT);
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(getPath(file));
+            NodeList list = doc.getElementsByTagName("item");
+            for (int i = 0; i < list.getLength(); ++i) {
+                Element element = (Element) list.item(i);
+                Stat e =  new Stat(i + 1);
+                e.setAddition(Boolean.parseBoolean(element.getAttribute("addition")));
+                b.add(e);
+            }
+        }
+        catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    public List<EcoStat> readEcoStats(){
+        List<EcoStat> b = new ArrayList<>();
+        try{
+            String file = Utils.getFileName(Database.ECO_STAT);
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(getPath(file));
+            NodeList list = doc.getElementsByTagName("item");
+            for (int i = 0; i < list.getLength(); ++i) {
+                Element element = (Element) list.item(i);
+                EcoStat e = new EcoStat(i + 1);
+                e.setValue(element.getAttribute("value"));
+                b.add(e);
+            }
+        }
+        catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    public List<GatheringRates> readGatheringRates(){
+        List<GatheringRates> b = new ArrayList<>();
+        try{
+            String file = Utils.getFileName(Database.GATHERING_RATES);
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(getPath(file));
+            NodeList list = doc.getElementsByTagName("item");
+            for (int i = 0; i < list.getLength(); ++i) {
+                Element element = (Element) list.item(i);
+                GatheringRates e = new GatheringRates(i + 1);
+                e.setEcoID(Integer.parseInt(element.getAttribute("ecoID")));
+                e.setResourceIcon(element.getAttribute("resourceIcon"));
+                e.setStatIcon(element.getAttribute("statIcon"));
+                b.add(e);
+            }
+        }
+        catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    public List<ClassElement> getClassList(List<ImageEditable> list){
+        return list.stream().map(e -> (ClassElement) e).collect(Collectors.toList());
+    }
+
+    public List<HistoryElement> getHistoryList(List<ImageEditable> list){
+        return list.stream().map(e -> (HistoryElement) e).collect(Collectors.toList());
+    }
+
+    public List<PerformanceElement> getPerformanceList(List<ImageEditable> list){
+        return list.stream().map(e -> (PerformanceElement) e).collect(Collectors.toList());
+    }
+
+    public List<TypeElement> getTypeList(List<ImageEditable> list){
+        return list.stream().map(e -> (TypeElement) e).collect(Collectors.toList());
+    }
+
+    public List<TauntElement> getTauntList(List<Editable> list){
+        return list.stream().map(e -> (TauntElement) e).collect(Collectors.toList());
+    }
+
+    public List<CivBonus> getCivBonuses(List<Bonus> list){
+        return list.stream().map(b -> (CivBonus) b).collect(Collectors.toList());
+    }
+
+    public List<HiddenBonus> getHiddenBonuses(List<Bonus> list){
+        return list.stream().map(b -> (HiddenBonus) b).collect(Collectors.toList());
+    }
 
     public GroupContainer readGroups(String file){
         try {
@@ -304,13 +427,13 @@ public class Reader {
                 Node item = list.item(z);
                 NodeList entryList = item.getChildNodes();
                 TypeValues values = new TypeValues();
-                List<TypeList> typeLists1 = new ArrayList<>();
+                List<TypeValues.TypeList> typeLists1 = new ArrayList<>();
                 for (int i = 0; i < entryList.getLength(); ++i) {
                     Node entryNode = entryList.item(i);
                     if (entryNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element entry = (Element) entryNode;
-                        TypeList typeList = new TypeList();
-                        List<TypeElement> typeElementList = new ArrayList<>();
+                        TypeValues.TypeList typeList = new TypeValues.TypeList();
+                        List<TypeValues.TypeElement> typeElementList = new ArrayList<>();
                         String groupName = entry.getAttribute("nameID");
                         NodeList valList = entry.getChildNodes();
                         for (int j = 0; j < valList.getLength(); ++j) {
@@ -319,7 +442,7 @@ public class Reader {
                                 Element value = (Element) valList.item(j);
                                 int typeID = Integer.parseInt(value.getAttribute("type"));
                                 double val = Double.parseDouble(value.getTextContent());
-                                TypeElement element = new TypeElement();
+                                TypeValues.TypeElement element = new TypeValues.TypeElement();
                                 element.setTypeID(typeID);
                                 element.setTypeValue(val);
                                 typeElementList.add(element);
@@ -433,6 +556,24 @@ public class Reader {
             eff.add(effect);
         }
         return eff;
+    }
+
+    public EcoUpgrades readEcoUpgrades(){
+        try {
+            EcoUpgrades ecoUpgrades = new EcoUpgrades();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(getPath(Database.ECO_UPGRADES));
+            Element upgradeListElement = (Element) doc.getElementsByTagName("item").item(0);
+            String[] upgradeIDs = upgradeListElement.getTextContent().split(" ");
+            List<Integer> upgrades = new ArrayList<>();
+            for (String s: upgradeIDs) upgrades.add(Integer.parseInt(s));
+            ecoUpgrades.setUpgrades(upgrades);
+            return ecoUpgrades;
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
+        return new EcoUpgrades();
     }
 
     public TechTreeQuizQuestions readTechTreeQuestions(){

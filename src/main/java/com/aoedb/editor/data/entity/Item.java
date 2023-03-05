@@ -1,13 +1,13 @@
 package com.aoedb.editor.data.entity;
 
-import com.aoedb.editor.data.items.TypeValues;
+import com.aoedb.editor.data.components.TypeValues;
 
 public abstract class Item extends Entity{
-    int classID;
-    int upgradedFromID;
+    protected Integer classID;
+    protected int upgradedFromID;
 
-    TypeValues attackList;
-    TypeValues armorList;
+    protected TypeValues attackList;
+    protected TypeValues armorList;
 
     public Item(int id) {
         super(id);

@@ -1,87 +1,63 @@
 package com.aoedb.editor.views;
 
-import com.aoedb.editor.data.items.Editable;
+import com.aoedb.editor.data.simple.Editable;
+import com.aoedb.editor.data.simple.ImageEditable;
 import com.aoedb.editor.database.Database;
-import com.aoedb.editor.views.components.EditableComponent;
-import com.aoedb.editor.views.components.UndoRedo;
-import com.aoedb.editor.views.components.UndoStack;
+import com.aoedb.editor.database.UndoRedoUtility;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 
-import java.util.Stack;
+import java.awt.*;
+
 
 @RoutePrefix("editable")
 @Route(value = ":type?/:ID?", layout = MainLayout.class)
 @CssImport(value = "./themes/aoe2databaseeditor/components/editable-component.css")
-public class EditableView extends VerticalLayout implements BeforeEnterObserver, UndoRedo {
-
-    private final Stack<UndoRedo> undo;
-    private final Stack<UndoRedo> redo;
+public class EditableView extends VerticalLayout implements BeforeEnterObserver {
 
     protected RouteParameters parameters;
     String type;
     int editableID;
-
-    UndoStack listener;
-
-    Editable editable;
-
-    EditableComponent component;
-
-    public EditableView(){
-        this.undo = new Stack<>();
-        this.redo = new Stack<>();
-    }
+    private Editable editable;
 
     public void setupView(){
-        this.component = this.editable.getEditableComponent();
-        this.component.setUndoStackListener(() -> {
-            undo.push(component);
-            redo.clear();
-            if (this.listener != null) this.listener.stackUndo();
+        HorizontalLayout idLayout = new HorizontalLayout();
+        ImageEditable ime = (ImageEditable) editable;
+        Image icon = new Image();
+        icon.setSrc(Database.getImage(ime.getImagePath()));
+        icon.setClassName("editable-label-icon");
+
+        Label idLabel =  new Label("ID - " + ime.getId());
+        Label nameLabel =  new Label(Database.getString(ime.getName()));
+        TextField imageField = new TextField(ime.getImagePath());
+        imageField.addValueChangeListener(e ->{
+            ime.setImagePath(e.getValue());
+            imageField.setLabel(e.getValue());
+            icon.setSrc(Database.getImage(e.getValue()));
+            UndoRedoUtility.pushUndo(() -> {
+                ime.setImagePath(e.getOldValue());
+                imageField.setLabel(e.getOldValue());
+                icon.setSrc(Database.getImage(e.getOldValue()));
+            });
         });
-        add(component);
-        setPadding(false);
+        idLayout.add(icon, idLabel, nameLabel, imageField);
+        this.add(idLayout);
+
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        parameters = beforeEnterEvent.getRouteParameters();
+        this.parameters = beforeEnterEvent.getRouteParameters();
         this.type = parameters.get("type").orElse("");
         this.editableID = Integer.parseInt(parameters.get("ID").orElse("-1"));
         this.editable = Database.getEditable(type, editableID);
-        setupView();
+        this.setupView();
     }
 
-    @Override
-    public void undo() {
-        if (!undo.isEmpty()) {
-            UndoRedo u = undo.pop();
-            u.undo();
-            this.redo.push(u);
-        }
-    }
 
-    @Override
-    public void redo() {
-        if (!redo.isEmpty()){
-            UndoRedo u = redo.pop();
-            u.redo();
-            this.undo.push(u);
-        }
-    }
-
-    @Override
-    public void setUndoStackListener(UndoStack listener) {
-        this.listener = listener;
-    }
-
-    public int undoSize(){
-        return undo.size();
-    }
-
-    public int redoSize(){
-        return redo.size();
-    }
 }

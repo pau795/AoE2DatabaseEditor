@@ -1,6 +1,6 @@
 package com.aoedb.editor.views;
 
-import com.aoedb.editor.data.items.Editable;
+import com.aoedb.editor.data.simple.Editable;
 import com.aoedb.editor.database.Database;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -24,16 +24,17 @@ public class MainView extends VerticalLayout {
     public MainView() {
         editableSearch = new ComboBox<>();
         editableSearch.addClassNames("main-search-bar");
-        ComboBox.ItemFilter<Editable> filter = (editable, filterString) -> editable.getId().getType().toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT)) || Database.getString(editable.getId().getName()).toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT));
+        ComboBox.ItemFilter<Editable> filter = (editable, filterString) -> editable.getType().toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT)) || Database
+                .getString(editable.getName()).toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT));
         editableSearch.setItems(filter, Database.getAllEditables());
-        editableSearch.setItemLabelGenerator(e -> Database.getString(e.getId().getName()));
-        editableSearch.setRenderer(new ComponentRenderer<>(e -> e.getId().getSearchLabel()));
+        editableSearch.setItemLabelGenerator(e -> Database.getString(e.getName()));
+        editableSearch.setRenderer(new ComponentRenderer<>(Editable::getEditableLabel));
         Icon prefixIcon = VaadinIcon.SEARCH.create();
         prefixIcon.getElement().setAttribute("slot", "prefix");
         editableSearch.getElement().appendChild(prefixIcon.getElement());
         editableSearch.addValueChangeListener(event -> {
             Editable e = event.getValue();
-            RouteParameters parameters = new RouteParameters(new RouteParam("type", e.getId().getType()), new RouteParam("ID", String.valueOf(e.getId().getId())));
+            RouteParameters parameters = new RouteParameters(new RouteParam("type", e.getType()), new RouteParam("ID", String.valueOf(e.getId())));
             getUI().ifPresent(ui -> ui.navigate(EditableView.class, parameters));
         });
         add(editableSearch);

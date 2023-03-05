@@ -1,21 +1,26 @@
 package com.aoedb.editor.data.entity;
 
 import com.aoedb.editor.data.components.BonusEffectContainer;
+import com.aoedb.editor.database.Database;
 
 
 public class Technology extends Entity {
 
-    BonusEffectContainer techEffect;
+    private BonusEffectContainer techEffect;
 
     public Technology(int id) {
         super(id);
     }
 
     @Override
-    protected String getNamePattern() {
+    public String getName() {
         return String.format("tech_name_%d", this.id);
     }
 
+    @Override
+    public String getType(){
+        return Database.TECH;
+    }
 
     public BonusEffectContainer getTechEffect() {
         return techEffect;

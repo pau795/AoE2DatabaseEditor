@@ -6,20 +6,20 @@ public class BonusEffectContainer {
 
     public static class EffectItem{
         private String filter;
-        private int techRequirement;
-        private boolean affectsSecondaryProjectile;
+        private Integer techRequirement;
+        private Boolean affectsSecondaryProjectile;
         private List<Integer> filterEntitiesIDs;
 
         private String statID;
         private String operator;
 
-        boolean staggered;
-        double singleValue;
-        double[] staggeredValues;
+        Boolean staggered;
+        Double singleValue;
+        Double[] staggeredValues;
 
         public EffectItem(boolean staggered){
             this.staggered = staggered;
-            staggeredValues = new double[] {0,0,0,0};
+            staggeredValues = new Double[] {0.0,0.0,0.0,0.0};
         }
 
         public String getFilter() {
@@ -102,11 +102,11 @@ public class BonusEffectContainer {
     public static final String DIV = "/";
     public static final String SET = "@";
 
-    int civID;
-    boolean teamBonus;
+    Integer civID;
+    Boolean teamBonus;
 
     private String globalFilter;
-    private boolean staggered;
+    private Boolean staggered;
 
     private List<EffectItem> statsEffects;
     private List<EffectItem> costEffects;

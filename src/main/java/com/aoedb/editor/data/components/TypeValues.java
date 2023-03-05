@@ -1,4 +1,4 @@
-package com.aoedb.editor.data.items;
+package com.aoedb.editor.data.components;
 
 import java.util.List;
 
@@ -27,8 +27,8 @@ public class TypeValues {
     }
 
     public static class TypeElement{
-        int typeID;
-        double TypeValue;
+        Integer typeID;
+        Double TypeValue;
 
         public int getTypeID() {
             return typeID;

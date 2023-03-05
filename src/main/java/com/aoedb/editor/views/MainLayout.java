@@ -1,6 +1,7 @@
 package com.aoedb.editor.views;
 
 
+import com.aoedb.editor.database.UndoRedoUtility;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
@@ -171,29 +172,19 @@ public class MainLayout extends AppLayout {
     }
 
     private void setupUndoRedo(){
-        Component c = getContent();
-        if (c instanceof EditableView){
-            EditableView view = (EditableView) c;
-            undo.addClickListener(event -> {
-                view.undo();
-                enableUndoButton(view.undoSize() > 0);
-                enableRedoButton(view.redoSize() > 0);
-            });
-            undo.addClickShortcut(Key.KEY_Z, KeyModifier.CONTROL);
-            redo.addClickListener(event -> {
-                view.redo();
-                enableUndoButton(view.undoSize() > 0);
-                enableRedoButton(view.redoSize() > 0);
-            });
-            redo.addClickShortcut(Key.KEY_Z, KeyModifier.CONTROL, KeyModifier.SHIFT);
-            view.setUndoStackListener(() -> {
-                enableUndoButton(true);
-                enableRedoButton(false);
-            });
-        }
-        else{
-            enableUndoButton(false);
-            enableRedoButton(false);
-        }
+        undo.addClickListener(event -> {
+            UndoRedoUtility.performUndo();
+            enableUndoButton(UndoRedoUtility.undoSize() > 0);
+            enableRedoButton(UndoRedoUtility.redoSize() > 0);
+        });
+        undo.addClickShortcut(Key.KEY_Z, KeyModifier.CONTROL);
+        redo.addClickListener(event -> {
+            UndoRedoUtility.performRedo();
+            enableUndoButton(UndoRedoUtility.undoSize() > 0);
+            enableRedoButton(UndoRedoUtility.redoSize() > 0);
+        });
+        redo.addClickShortcut(Key.KEY_Z, KeyModifier.CONTROL, KeyModifier.SHIFT);
     }
+
+
 }

@@ -1,6 +1,6 @@
 package com.aoedb.editor.data.entity;
 
-import com.aoedb.editor.data.items.ImageEditable;
+import com.aoedb.editor.data.simple.ImageEditable;
 import com.aoedb.editor.data.components.*;
 
 import java.util.LinkedHashMap;

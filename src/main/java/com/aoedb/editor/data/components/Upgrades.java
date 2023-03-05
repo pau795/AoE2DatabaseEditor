@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Upgrades {
     public static class UpgradeList {
-        private int elementID;
+        private Integer elementID;
         private List<Integer> subList;
 
         public int getElementID() {

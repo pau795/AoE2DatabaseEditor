@@ -1,11 +1,11 @@
 package com.aoedb.editor.data.bonus;
 
-import com.aoedb.editor.data.items.Editable;
+import com.aoedb.editor.data.simple.Editable;
 import com.aoedb.editor.data.components.BonusEffectContainer;
 
 public abstract class Bonus extends Editable {
 
-    BonusEffectContainer bonusEffect;
+    protected BonusEffectContainer bonusEffect;
 
     protected Bonus(int id) {
         super(id);

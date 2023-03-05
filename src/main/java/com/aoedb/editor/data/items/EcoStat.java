@@ -1,12 +1,25 @@
 package com.aoedb.editor.data.items;
 
 
-public class EcoStat extends Editable{
+import com.aoedb.editor.data.simple.Editable;
+import com.aoedb.editor.database.Database;
+
+public class EcoStat extends Editable {
 
     private String value;
 
-    private EcoStat(int id) {
+    public EcoStat(int id) {
         super(id);
+    }
+
+    @Override
+    public String getName(){
+        return String.format("eco_name_%d", this.id);
+    }
+
+    @Override
+    public String getType(){
+        return Database.ECO_STAT;
     }
 
     public String getValue() {

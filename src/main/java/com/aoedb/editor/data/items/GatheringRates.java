@@ -1,18 +1,23 @@
 package com.aoedb.editor.data.items;
 
 
+import com.aoedb.editor.data.simple.Editable;
+import com.aoedb.editor.database.Database;
 
-public class GatheringRates extends Editable{
+public class GatheringRates extends Editable {
 
-    int ecoID;
-    String resourceIcon;
-    String statIcon;
+    private Integer ecoID;
+    private String resourceIcon;
+    private String statIcon;
 
-
-    private GatheringRates(int id) {
+    public GatheringRates(int id) {
         super(id);
     }
 
+    @Override
+    public String getName() {
+        return String.format("gathering_rates_%d", this.id);
+    }
 
     public int getEcoID() {
         return ecoID;
@@ -36,5 +41,10 @@ public class GatheringRates extends Editable{
 
     public void setStatIcon(String statIcon) {
         this.statIcon = statIcon;
+    }
+
+    @Override
+    public String getType(){
+        return Database.GATHERING_RATES;
     }
 }

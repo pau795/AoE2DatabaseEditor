@@ -1,14 +1,20 @@
 package com.aoedb.editor.data.entity;
 
 import com.aoedb.editor.data.components.PerformanceContainer;
+import com.aoedb.editor.database.Database;
 
 public class Unit extends Item{
 
-    PerformanceContainer performance;
+    private PerformanceContainer performance;
 
     public Unit(int id) {
         super(id);
 
+    }
+
+    @Override
+    public String getType(){
+        return Database.UNIT;
     }
 
     public PerformanceContainer getPerformance() {
@@ -20,7 +26,7 @@ public class Unit extends Item{
     }
 
     @Override
-    protected String getNamePattern(){
+    public String getName(){
         return String.format("unit_name_%d", this.id);
     }
 }

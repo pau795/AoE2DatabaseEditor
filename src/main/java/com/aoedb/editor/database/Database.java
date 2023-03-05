@@ -2,14 +2,13 @@ package com.aoedb.editor.database;
 
 import com.aoedb.editor.data.bonus.CivBonus;
 import com.aoedb.editor.data.bonus.HiddenBonus;
-import com.aoedb.editor.data.components.EditableContainer;
 import com.aoedb.editor.data.entity.Building;
 import com.aoedb.editor.data.entity.Civilization;
 import com.aoedb.editor.data.entity.Technology;
 import com.aoedb.editor.data.entity.Unit;
 import com.aoedb.editor.data.items.*;
+import com.aoedb.editor.data.simple.*;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +66,6 @@ public class Database {
     public final static String CLASS_LIST = "class_list";
     public final static String ECO_LIST = "eco_list";
     public final static String ECO_UPGRADES = "eco_upgrades";
-    public final static String ENTITY_LIST = "entity_list";
     public final static String GATHERING_RATES = "gathering_rates";
     public final static String HIDDEN_BONUS = "hidden_bonus";
     public final static String HIDDEN_BONUS_EFFECT = "hidden_bonus_effect";
@@ -100,31 +98,34 @@ public class Database {
 
 
     public static String BASE_DIR = "D:\\Proyectos\\AoE2DatabaseData\\";
-    private static List<Unit> unitList;
-    private static List<Building> buildingList;
-    private static List<Technology> techList;
-    private static List<Civilization> civList;
-    private static List<ImageEditable> classList;
-    private static List<ImageEditable> typeList;
-    private static List<Editable> tauntList;
-    private static List<ImageEditable> performanceList;
-    private static List<ImageEditable> historyList;
-    private static List<Stat> statList;
-    private static List<EcoStat> ecoStatsList;
-    private static List<GatheringRates> gatheringRates;
-    public static List<CivBonus> bonusList;
-    private static List<HiddenBonus> hiddenBonusList;
+    private static  List<Unit> unitList;
+    private static  List<Building> buildingList;
+    private static  List<Technology> techList;
+    private static  List<Civilization> civList;
+    private static  List<ClassElement> classList;
+    private static  List<TypeElement> typeList;
+    private static  List<TauntElement> tauntList;
+    private static  List<PerformanceElement> performanceList;
+    private static  List<HistoryElement> historyList;
+    private static  List<Stat> statList;
+    private static  List<EcoStat> ecoStatsList;
+    private static  List<GatheringRates> gatheringRates;
+    public static  List<CivBonus> bonusList;
+    private static  List<HiddenBonus> hiddenBonusList;
 
-    private static StringData stringData;
+    private static  StringData stringData;
 
-    private static GroupContainer unitGroups;
-    private static GroupContainer buildingGroups;
-    private static GroupContainer techGroups;
-    private static GroupContainer civGroups;
-    private static GroupContainer performanceGroups;
-    private static GroupContainer historyGroups;
-    private static TechTreeQuizQuestions techTreeQuizQuestions;
-    private static String currentLanguage;
+    private static  GroupContainer unitGroups;
+    private static  GroupContainer buildingGroups;
+    private static  GroupContainer techGroups;
+    private static  GroupContainer civGroups;
+    private static  GroupContainer performanceGroups;
+    private static  GroupContainer historyGroups;
+    private static  TechTreeQuizQuestions techTreeQuizQuestions;
+
+    private static  EcoUpgrades ecoUpgrades;
+    private static  String currentLanguage;
+
 
     public static void loadDatabase(){
         Reader r = new Reader();
@@ -137,17 +138,17 @@ public class Database {
         techList = r.readTechnologies();
         civList = r.readCivilizations();
 
-        classList = r.readList();
-        typeList = r.readList(Database.TYPE, ImageEditable::new);
-        performanceList = r.readList(Database.PERFORMANCE, ImageEditable::new);
-        tauntList = r.readList(Database.TAUNT, SimpleEditable::new);
-        historyList = r.readList(Database.HISTORY, ImageEditable::new);
-        statList =  r.readList(Database.STAT, Stat::new);
-        ecoStatsList = r.readList(Database.ECO_STAT, EcoStat::new);
-        gatheringRates = r.readList(Database.GATHERING_RATES, GatheringRates::new);
+        classList = r.getClassList(r.readImageEditableList(Database.CLASS));
+        typeList = r.getTypeList(r.readImageEditableList(Database.TYPE));
+        performanceList = r.getPerformanceList(r.readImageEditableList(Database.PERFORMANCE));
+        historyList = r.getHistoryList(r.readImageEditableList(Database.HISTORY));
+        tauntList = r.getTauntList(r.readEditableList(Database.TAUNT));
+        statList =  r.readStats();
+        ecoStatsList = r.readEcoStats();
+        gatheringRates = r.readGatheringRates();
 
-        bonusList = r.readBonuses(Database.BONUS);
-        hiddenBonusList = r.readBonuses(Database.HIDDEN_BONUS, HiddenBonus::new);
+        bonusList = r.getCivBonuses(r.readBonuses(Database.BONUS));
+        hiddenBonusList = r.getHiddenBonuses(r.readBonuses(Database.HIDDEN_BONUS));
 
         unitGroups = r.readGroups(Database.UNIT_GROUPS);
         buildingGroups = r.readGroups(Database.BUILDING_GROUPS);
@@ -156,78 +157,79 @@ public class Database {
         performanceGroups = r.readGroups(Database.PERFORMANCE_GROUPS);
         historyGroups = r.readGroups(Database.HISTORY_GROUPS);
         techTreeQuizQuestions = r.readTechTreeQuestions();
+        ecoUpgrades = r.readEcoUpgrades();
     }
 
-    public static String getString(String key){
+    public static  String getString(String key){
         return stringData.getString(key, currentLanguage);
     }
 
-    public static String getImage(String imageName){
+    public static  String getImage(String imageName){
         if (imageName.startsWith("g_")) return "images/"+imageName+".gif";
         else return "images/"+imageName+".png";
     }
 
 
-    public static String getSound(String soundName, String language){
+    public static  String getSound(String soundName, String language){
         if (soundName.startsWith("t_")) return "sound/"+language+"/" + soundName +".ogg";
         else return "sound/en/" + soundName +".ogg";
     }
 
 
-    public static Unit getUnit(int id){
-        return (Unit) unitList.get(id - 1);
+    public static  Unit getUnit(int id){
+        return unitList.get(id - 1);
     }
 
-    public static Building getBuilding(int id){
-        return (Building) buildingList.get(id - 1);
+    public static  Building getBuilding(int id){
+        return buildingList.get(id - 1);
     }
 
-    public static Technology getTechnology(int id){
-        return (Technology) techList.get(id - 1);
+    public static  Technology getTechnology(int id){
+        return techList.get(id - 1);
     }
 
-    public static Civilization getCivilization(int id){
-        return (Civilization) civList.get(id - 1);
+    public static  Civilization getCivilization(int id){
+        return civList.get(id - 1);
     }
 
-    public static ImageEditable getClass(int id){
-        return (ImageEditable) classList.get(id - 1);
+    public static  ClassElement getClass(int id){
+        return classList.get(id - 1);
     }
 
-    public static ImageEditable getType(int id){
-        return (ImageEditable) typeList.get(id - 1);
+    public static  TypeElement getType(int id){
+        return typeList.get(id - 1);
     }
 
-    public static ImageEditable getPerformance(int id){
-        return (ImageEditable) performanceList.get(id - 1);
+    public static  PerformanceElement getPerformance(int id){
+        return performanceList.get(id - 1);
     }
 
-    public static ImageEditable getHistory(int id){
-        return (ImageEditable) historyList.get(id - 1);
+    public static  HistoryElement getHistory(int id){
+        return historyList.get(id - 1);
     }
 
-    public static Editable getTaunt(int id){
-        return (Editable) tauntList.get(id - 1);
+    public static  TauntElement getTaunt(int id){
+        return tauntList.get(id - 1);
     }
 
-    public static Stat getStat(int id){
-        return (Stat) statList.get(id - 1);
+    public static  Stat getStat(int id){
+        return statList.get(id - 1);
     }
 
-    public static EcoStat getEcoStat(int id){
-        return (EcoStat) ecoStatsList.get(id - 1);
+    public static  EcoStat getEcoStat(int id){
+        return ecoStatsList.get(id - 1);
     }
 
-    public static GatheringRates getGatheringRates(int id){
-        return (GatheringRates) gatheringRates.get(id - 1);
+    public static  GatheringRates getGatheringRates(int id){
+        return gatheringRates.get(id - 1);
     }
 
-    public static CivBonus getBonus(int id){
-        return (CivBonus) bonusList.get(id - 1);
+    public static  CivBonus getBonus(int id){
+        return bonusList.get(id - 1);
     }
 
-    public static HiddenBonus getHiddenBonus(int id){
-        return (HiddenBonus) hiddenBonusList.get(id - 1);
+    public static  HiddenBonus getHiddenBonus(int id){
+        return hiddenBonusList.get(id - 1);
     }
 
 
@@ -275,7 +277,19 @@ public class Database {
         }
     }
 
-    public static List<Editable> getAllEditables(){
+    public static  GroupContainer getGroup(String type) {
+        switch (type){
+            case Database.BUILDING_GROUPS: return buildingGroups;
+            case Database.UNIT_GROUPS: return unitGroups;
+            case Database.TECH_GROUPS: return techGroups;
+            case Database.CIVILIZATION_GROUPS: return civGroups;
+            case Database.PERFORMANCE_GROUPS: return performanceGroups;
+            case Database.HISTORY_GROUPS: return historyGroups;
+            default: return null;
+        }
+    }
+
+    public static  List<Editable> getAllEditables(){
         List<Editable> list = new ArrayList<>();
         list.addAll(unitList);
         list.addAll(buildingList);
@@ -292,11 +306,17 @@ public class Database {
         list.addAll(bonusList);
         list.addAll(hiddenBonusList);
         return list;
-
     }
 
+    public static  TechTreeQuizQuestions getTechTreeQuizQuestions() {
+        return techTreeQuizQuestions;
+    }
 
-    public static List<String> getImageNamesList() {
+    public static  EcoUpgrades getEcoUpgrades(){
+        return ecoUpgrades;
+    }
+
+    public static  List<String> getImageNamesList() {
         try {
             String path = "META-INF/resources/images";
             PathMatchingResourcePatternResolver scanner = new PathMatchingResourcePatternResolver();
