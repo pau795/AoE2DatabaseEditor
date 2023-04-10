@@ -12,8 +12,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 
-import java.awt.*;
-
 
 @RoutePrefix("editable")
 @Route(value = ":type?/:ID?", layout = MainLayout.class)
@@ -34,16 +32,20 @@ public class EditableView extends VerticalLayout implements BeforeEnterObserver 
 
         Label idLabel =  new Label("ID - " + ime.getId());
         Label nameLabel =  new Label(Database.getString(ime.getName()));
-        TextField imageField = new TextField(ime.getImagePath());
+        TextField imageField = new TextField();
+        imageField.setValue(ime.getImagePath());
         imageField.addValueChangeListener(e ->{
-            ime.setImagePath(e.getValue());
-            imageField.setLabel(e.getValue());
-            icon.setSrc(Database.getImage(e.getValue()));
-            UndoRedoUtility.pushUndo(() -> {
-                ime.setImagePath(e.getOldValue());
-                imageField.setLabel(e.getOldValue());
-                icon.setSrc(Database.getImage(e.getOldValue()));
-            });
+            UndoRedoUtility uru = UndoRedoUtility.getInstance();
+            if (!uru.isActionInProgress()) {
+                ime.setImagePath(e.getValue());
+                imageField.setValue(e.getValue());
+                icon.setSrc(Database.getImage(e.getValue()));
+                uru.pushUndo(() -> {
+                    ime.setImagePath(e.getOldValue());
+                    imageField.setValue(e.getOldValue());
+                    icon.setSrc(Database.getImage(e.getOldValue()));
+                });
+            }
         });
         idLayout.add(icon, idLabel, nameLabel, imageField);
         this.add(idLayout);

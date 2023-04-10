@@ -257,25 +257,6 @@ public class Database {
         }
     }
 
-    public static List<? extends Editable> getList(String type){
-        switch (type){
-            case Database.UNIT: return unitList;
-            case Database.BUILDING: return buildingList;
-            case Database.TECH: return techList;
-            case Database.CIV: return civList;
-            case Database.CLASS: return classList;
-            case Database.TYPE: return typeList;
-            case Database.PERFORMANCE: return performanceList;
-            case Database.TAUNT: return tauntList;
-            case Database.HISTORY: return historyList;
-            case Database.STAT: return statList;
-            case Database.ECO_STAT: return ecoStatsList;
-            case Database.GATHERING_RATES: return gatheringRates;
-            case Database.BONUS: return bonusList;
-            case Database.HIDDEN_BONUS: return hiddenBonusList;
-            default: return null;
-        }
-    }
 
     public static  GroupContainer getGroup(String type) {
         switch (type){
@@ -287,6 +268,62 @@ public class Database {
             case Database.HISTORY_GROUPS: return historyGroups;
             default: return null;
         }
+    }
+
+    public static List<Unit> getUnitList() {
+        return unitList;
+    }
+
+    public static List<Building> getBuildingList() {
+        return buildingList;
+    }
+
+    public static List<Technology> getTechList() {
+        return techList;
+    }
+
+    public static List<Civilization> getCivList() {
+        return civList;
+    }
+
+    public static List<ClassElement> getClassList() {
+        return classList;
+    }
+
+    public static List<TypeElement> getTypeList() {
+        return typeList;
+    }
+
+    public static List<TauntElement> getTauntList() {
+        return tauntList;
+    }
+
+    public static List<PerformanceElement> getPerformanceList() {
+        return performanceList;
+    }
+
+    public static List<HistoryElement> getHistoryList() {
+        return historyList;
+    }
+
+    public static List<Stat> getStatList() {
+        return statList;
+    }
+
+    public static List<EcoStat> getEcoStatsList() {
+        return ecoStatsList;
+    }
+
+    public static List<GatheringRates> getGatheringRates() {
+        return gatheringRates;
+    }
+
+    public static List<CivBonus> getBonusList() {
+        return bonusList;
+    }
+
+    public static List<HiddenBonus> getHiddenBonusList() {
+        return hiddenBonusList;
     }
 
     public static  List<Editable> getAllEditables(){

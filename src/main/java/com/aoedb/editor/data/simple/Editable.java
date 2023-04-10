@@ -31,14 +31,14 @@ public abstract class Editable implements Serializable {
     public Component getEditableLabel(){
         Div layout =  new Div();
         layout.addClassNames("editable-label-layout");
-        Label name = new Label(Database.getString(this.getName()));
+        String name2;
+        String name1 = Database.getString(this.getName());
+        if (name1.length() < 30) name2 = name1;
+        else name2 = name1.substring(0, 27) + "...";
+        Label name = new Label(name2);
+        name.getElement().setAttribute("title", Database.getString(this.getName()));
         name.addClassNames("editable-label-name");
-
-        Label id = new Label("ID - " + this.getId());
-        id.addClassNames("editable-label-id");
-        Label type = new Label(this.getType());
-        type.addClassNames("editable-label-type");
-        layout.add(name, id, type);
+        layout.add(name);
         return layout;
     }
 

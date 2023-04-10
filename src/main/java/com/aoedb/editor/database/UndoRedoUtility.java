@@ -1,61 +1,97 @@
 package com.aoedb.editor.database;
 
+
+import com.aoedb.editor.views.component.UndoRedoPanel;
+
 import java.util.Stack;
 
 public class UndoRedoUtility {
 
-    private static final Stack<FunctionValue> undoStack =  new Stack<>();
-    private static final Stack<FunctionValue> redoStack =  new Stack<>();
 
+    private static UndoRedoUtility instance;
 
-    public static int undoSize(){
-        return undoStack.size();
+    public static UndoRedoUtility getInstance() {
+        if (instance == null) instance = new UndoRedoUtility();
+        return instance;
     }
 
-    public static int redoSize(){
-        return redoStack.size();
+    private final Stack<CustomFunction> undoStack;
+
+    private final Stack<CustomFunction> redoStack;
+
+    private final UndoRedoPanel buttonPanel;
+
+    private boolean actionInProgress;
+
+    private UndoRedoUtility(){
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
+        actionInProgress = false;
+        buttonPanel = new UndoRedoPanel();
+        buttonPanel.setUndoRedoListeners(new UndoRedoPanel.UndoRedoButtons() {
+            @Override
+            public void onUndoClick() {
+                performUndo();
+            }
+
+            @Override
+            public void onRedoClick() {
+                performRedo();
+            }
+        });
     }
 
-    public static void pushUndo(CustomFunction function){
-        FunctionValue undoItem = new FunctionValue(function);
-        undoStack.push(undoItem);
+    public void pushUndo(CustomFunction function){
+        undoStack.push(function);
         redoStack.clear();
+        updateButtons();
     }
 
-    private static  void pushUndo(FunctionValue functionValue){
-        undoStack.push(functionValue);
+    private void pushUndoFromRedo(CustomFunction function){
+        undoStack.push(function);
+        updateButtons();
     }
 
-    private static void pushRedo(FunctionValue functionValue){
-        redoStack.push(functionValue);
+    private void pushRedo(CustomFunction function){
+        redoStack.push(function);
+        updateButtons();
     }
 
-    public static void performUndo(){
+    public void performUndo(){
         if (!undoStack.isEmpty()) {
-            FunctionValue p = undoStack.pop();
-            p.callFunction();
+            CustomFunction p = undoStack.pop();
+            actionInProgress = true;
+            p.function();
             pushRedo(p);
+            actionInProgress = false;
+            updateButtons();
         }
     }
 
-    public static void performRedo(){
+    public void performRedo(){
         if (!redoStack.isEmpty()) {
-            FunctionValue p = redoStack.pop();
-            p.callFunction();
-            pushUndo(p);
+            CustomFunction p = redoStack.pop();
+            actionInProgress = true;
+            p.function();
+            pushUndoFromRedo(p);
+            actionInProgress = false;
+            updateButtons();
         }
     }
 
-    private static class FunctionValue{
-        private final CustomFunction function;
-        public FunctionValue(CustomFunction function){
-            this.function = function;
-        }
-
-        public void callFunction(){
-            function.function();
-        }
+    private void updateButtons(){
+        buttonPanel.enableUndoButton(undoStack.size() > 0);
+        buttonPanel.enableRedoButton(redoStack.size() > 0);
     }
+
+    public UndoRedoPanel getButtonPanel(){
+        return buttonPanel;
+    }
+
+    public boolean isActionInProgress(){
+        return actionInProgress;
+    }
+
 
     public interface CustomFunction {
         void function();
