@@ -1,0 +1,50 @@
+.editable-component-base-layout > vaadin-accordion [slot='summary'] {
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    text-decoration: underline;
+}
+
+.layout-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
+.entities-layout-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
+
+.base-stats-layout-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(500px, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
+.upgrades-category-header{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid rgba(222, 222, 222, 0.4);
+    font-size: 16px;
+}
+
+.black-border-bottom{
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+}
+
+.bonus-effect-category-title{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.margin-match-label{
+    margin-top: 38px;
+}

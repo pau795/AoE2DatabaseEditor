@@ -1,6 +1,8 @@
 package com.aoedb.editor.data.simple;
 
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.ClassView;
+import com.aoedb.editor.views.editable.EditableView;
 
 public class ClassElement extends ImageEditable{
 
@@ -16,5 +18,10 @@ public class ClassElement extends ImageEditable{
     @Override
     public String getType(){
         return Database.CLASS;
+    }
+
+    @Override
+    public EditableView getEditableView() {
+        return new ClassView(this);
     }
 }

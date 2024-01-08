@@ -1,6 +1,7 @@
 package com.aoedb.editor.data.components;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Upgrades {
@@ -8,6 +9,10 @@ public class Upgrades {
         private Integer elementID;
         private List<Integer> subList;
 
+        public UpgradeList(int elementID){
+            this.elementID = elementID;
+            this.subList = new ArrayList<>();
+        }
         public int getElementID() {
             return elementID;
         }
@@ -29,6 +34,14 @@ public class Upgrades {
 
     public List<UpgradeList> getExpandableList() {
         return expandableList;
+    }
+
+    public void addUpgradeList(UpgradeList upgrade){
+        this.expandableList.add(upgrade);
+    }
+
+    public void removeUpgradeList(UpgradeList upgrade){
+        this.expandableList.remove(upgrade);
     }
 
     public void setExpandableList(List<UpgradeList> expandableList) {

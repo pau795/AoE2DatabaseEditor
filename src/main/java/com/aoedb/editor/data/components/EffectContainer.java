@@ -1,10 +1,23 @@
 package com.aoedb.editor.data.components;
 
+import com.aoedb.editor.database.Database;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class BonusEffectContainer {
+public class EffectContainer {
 
     public static class EffectItem{
+
+        public static final String ADD = "+";
+        public static final String MINUS = "-";
+        public static final String MULT = "*";
+        public static final String DIV = "/";
+        public static final String SET = "@";
+
+        public static final String[] FILTER_LIST = {NONE, CLASS, UNIT, BUILDING, TECH, TECH_REQUIREMENT};
+        public static final String[] OPERATOR_LIST = {ADD, MINUS, MULT, DIV, SET};
+
         private String filter;
         private Integer techRequirement;
         private Boolean affectsSecondaryProjectile;
@@ -13,13 +26,19 @@ public class BonusEffectContainer {
         private String statID;
         private String operator;
 
-        Boolean staggered;
-        Double singleValue;
-        Double[] staggeredValues;
+        private Boolean staggered;
+        private Double singleValue;
+        private final Double[] staggeredValues;
 
         public EffectItem(boolean staggered){
+            this.statID = "1";
             this.staggered = staggered;
-            staggeredValues = new Double[] {0.0,0.0,0.0,0.0};
+            this.staggeredValues = new Double[] {0.0,0.0,0.0,0.0};
+            this.singleValue = 0.0;
+            this.setFilter(Database.NONE);
+            this.setAffectsSecondaryProjectile(false);
+            this.setTechRequirement(0);
+            this.setFilterEntitiesIDs(new ArrayList<>());
         }
 
         public String getFilter() {
@@ -82,25 +101,46 @@ public class BonusEffectContainer {
             }
         }
 
-        public double getValue(int age){
-            if(staggered) return staggeredValues[age];
-            else return singleValue;
+        public void setSingleValue(Double v){
+            singleValue = v;
         }
 
+        public void setStaggeredValue(Double v, int pos){
+            staggeredValues[pos] = v;
+        }
 
+        public double getStaggeredValue(int age){
+            return staggeredValues[age];
+        }
+
+        public double getSingleValue(){
+            return singleValue;
+        }
+
+        public Boolean getStaggered() {
+            return staggered;
+        }
+
+        public void setStaggered(Boolean staggered) {
+            this.staggered = staggered;
+        }
     }
 
+    public static final String NONE = "none";
     public static final String CLASS = "class";
     public static final String UNIT = "unit";
     public static final String BUILDING = "building";
     public static final String TECH = "tech";
     public static final String TECH_REQUIREMENT = "techRequirement";
 
-    public static final String ADD = "+";
-    public static final String MINUS = "-";
-    public static final String MULT = "*";
-    public static final String DIV = "/";
-    public static final String SET = "@";
+    public static final String STAT = "stat";
+    public static final String COST = "cost";
+    public static final String ECO = "eco";
+    public static final String ATTACK = "attack";
+    public static final String ARMOR = "armor";
+
+
+    public static final String[] GLOBAL_FILTER_LIST = {NONE, UNIT, BUILDING, TECH};
 
     Integer civID;
     Boolean teamBonus;
@@ -144,6 +184,11 @@ public class BonusEffectContainer {
 
     public void setStaggered(boolean staggered) {
         this.staggered = staggered;
+        this.statsEffects.forEach(effect -> effect.setStaggered(staggered));
+        this.costEffects.forEach(effect -> effect.setStaggered(staggered));
+        this.ecoEffects.forEach(effect -> effect.setStaggered(staggered));
+        this.attackEffects.forEach(effect -> effect.setStaggered(staggered));
+        this.armorEffects.forEach(effect -> effect.setStaggered(staggered));
     }
 
     public List<EffectItem> getStatsEffects() {

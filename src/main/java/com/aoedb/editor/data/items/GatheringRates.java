@@ -3,6 +3,8 @@ package com.aoedb.editor.data.items;
 
 import com.aoedb.editor.data.simple.Editable;
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.EditableView;
+import com.aoedb.editor.views.editable.GatheringRatesView;
 
 public class GatheringRates extends Editable {
 
@@ -46,5 +48,10 @@ public class GatheringRates extends Editable {
     @Override
     public String getType(){
         return Database.GATHERING_RATES;
+    }
+
+    @Override
+    public EditableView getEditableView() {
+        return new GatheringRatesView(this);
     }
 }

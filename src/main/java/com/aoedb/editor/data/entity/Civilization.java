@@ -2,6 +2,8 @@ package com.aoedb.editor.data.entity;
 
 import com.aoedb.editor.data.simple.ImageEditable;
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.CivilizationView;
+import com.aoedb.editor.views.editable.EditableView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,12 @@ public class Civilization extends ImageEditable {
     public String getType(){
         return Database.CIV;
     }
+
+    @Override
+    public EditableView getEditableView() {
+        return new CivilizationView(this);
+    }
+
     private List<Integer> bonusList;
     private int teamBonus;
     private List<UniqueUnit> uniqueUnitList;
@@ -109,5 +117,7 @@ public class Civilization extends ImageEditable {
     public void setUniqueBuilding(int uniqueBuilding) {
         this.uniqueBuilding = uniqueBuilding;
     }
+
+
 
 }

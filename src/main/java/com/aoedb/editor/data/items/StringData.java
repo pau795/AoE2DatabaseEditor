@@ -14,6 +14,10 @@ public class StringData {
         return langMap.get(language).get(key);
     }
 
+    public void setString(String key, String string, String language){
+        langMap.get(language).put(key, string);
+    }
+
     public void addLangMap(String lang, HashMap<String, String> map){
         this.langMap.put(lang, map);
     }

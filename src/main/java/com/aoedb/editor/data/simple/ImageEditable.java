@@ -21,13 +21,4 @@ public abstract class ImageEditable extends Editable {
         this.imagePath = imagePath;
     }
 
-    @Override
-    public Component getEditableLabel(){
-        Div layout = (Div) super.getEditableLabel();
-        Image icon = new Image();
-        icon.setSrc(Database.getImage(this.getImagePath()));
-        icon.addClassNames("editable-label-icon");
-        layout.addComponentAsFirst(icon);
-        return layout;
-    }
 }

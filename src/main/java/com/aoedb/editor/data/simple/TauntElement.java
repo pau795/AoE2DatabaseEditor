@@ -1,6 +1,8 @@
 package com.aoedb.editor.data.simple;
 
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.EditableView;
+import com.aoedb.editor.views.editable.TauntView;
 
 public class TauntElement extends Editable{
 
@@ -16,5 +18,10 @@ public class TauntElement extends Editable{
     @Override
     public String getType(){
         return Database.TAUNT;
+    }
+
+    @Override
+    public EditableView getEditableView() {
+        return new TauntView(this);
     }
 }

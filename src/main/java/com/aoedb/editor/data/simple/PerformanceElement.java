@@ -1,6 +1,9 @@
 package com.aoedb.editor.data.simple;
 
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.EditableView;
+import com.aoedb.editor.views.editable.ImageEditableView;
+import com.aoedb.editor.views.editable.PerformanceView;
 
 public class PerformanceElement extends ImageEditable{
 
@@ -16,5 +19,10 @@ public class PerformanceElement extends ImageEditable{
     @Override
     public String getType(){
         return Database.PERFORMANCE;
+    }
+
+    @Override
+    public EditableView getEditableView() {
+        return new PerformanceView(this);
     }
 }

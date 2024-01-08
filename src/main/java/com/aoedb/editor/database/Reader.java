@@ -5,7 +5,7 @@ import com.aoedb.editor.data.bonus.CivBonus;
 import com.aoedb.editor.data.bonus.HiddenBonus;
 import com.aoedb.editor.data.components.Upgrades.UpgradeList;
 import com.aoedb.editor.data.items.*;
-import com.aoedb.editor.data.components.BonusEffectContainer.EffectItem;
+import com.aoedb.editor.data.components.EffectContainer.EffectItem;
 import com.aoedb.editor.data.entity.Building;
 import com.aoedb.editor.data.entity.Civilization;
 import com.aoedb.editor.data.entity.Civilization.UniqueUnit;
@@ -125,7 +125,7 @@ public class Reader {
             String file = Utils.getFileName(type);
             List<Bonus> bonusList = new ArrayList<>();
             String effectFile = Utils.getEffectFileName(file);
-            List<BonusEffectContainer> effects = readBonusEffectContainer(effectFile);
+            List<EffectContainer> effects = readBonusEffectContainer(effectFile);
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(getPath(file));
@@ -295,8 +295,7 @@ public class Reader {
                             int uid = Integer.parseInt(u);
                             idList.add(uid);
                         }
-                        UpgradeList upgrades = new UpgradeList();
-                        upgrades.setElementID(headerID);
+                        UpgradeList upgrades = new UpgradeList(headerID);
                         upgrades.setSubList(idList);
                         upgradesList.add(upgrades);
                     }
@@ -465,16 +464,16 @@ public class Reader {
         return new ArrayList<>();
     }
 
-    private List<BonusEffectContainer> readBonusEffectContainer(String file) {
+    private List<EffectContainer> readBonusEffectContainer(String file) {
         try {
-            List<BonusEffectContainer> map = new ArrayList<>();
+            List<EffectContainer> map = new ArrayList<>();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(getPath(file));
             NodeList list = doc.getElementsByTagName("item");
             for (int z = 0; z < list.getLength(); ++z) {
                 Element item = (Element) list.item(z);
-                BonusEffectContainer container = new BonusEffectContainer();
+                EffectContainer container = new EffectContainer();
                 Element effectsInfo = (Element) item.getElementsByTagName("info").item(0);
                 boolean staggered;
                 switch (file){
@@ -497,7 +496,6 @@ public class Reader {
                         container.setGlobalFilter(effectsInfo.getAttribute("globalFilter"));
                         break;
                 }
-                container.setStaggered(staggered);
                 Element effectsData = (Element) item.getElementsByTagName("effects").item(0);
                 Element statEffect = (Element) effectsData.getElementsByTagName("statEffect").item(0);
                 Element costEffect = (Element) effectsData.getElementsByTagName("costEffect").item(0);
@@ -514,6 +512,7 @@ public class Reader {
                 container.setEcoEffects(eEa);
                 container.setAttackEffects(attVEa);
                 container.setArmorEffects(armVEa);
+                container.setStaggered(staggered);
                 map.add(container);
             }
             return map;
@@ -539,7 +538,7 @@ public class Reader {
                 else effect.setAffectsSecondaryProjectile(false);
                 if (filter.hasAttribute("requiredTech"))
                     effect.setTechRequirement(Integer.parseInt(filter.getAttribute("requiredTech")));
-                else effect.setTechRequirement(-1);
+                else effect.setTechRequirement(0);
                 ArrayList<Integer> filterIds = new ArrayList<>();
                 String[] fIDs = filter.getAttribute("ids").split(" ");
                 for (String s : fIDs){
@@ -548,7 +547,6 @@ public class Reader {
                 }
                 effect.setFilterEntitiesIDs(filterIds);
             }
-            else effect.setFilter(Database.NONE);
             effect.setStatID(operation.getAttribute("stat"));
             effect.setOperator(operation.getAttribute("operator"));
 
@@ -815,7 +813,7 @@ public class Reader {
             List<Upgrades> upgrades = readUpgrades(Database.TECH_UPGRADES);
             List<Availability> availability = readAvailability(Database.TECH_AVAILABILITY);
             List<BonusContainer> bonusContainer = readBonusContainer(Database.TECH_BONUS);
-            List<BonusEffectContainer> effectContainers = readBonusEffectContainer(Database.TECH_EFFECT);
+            List<EffectContainer> effectContainers = readBonusEffectContainer(Database.TECH_EFFECT);
 
 
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();

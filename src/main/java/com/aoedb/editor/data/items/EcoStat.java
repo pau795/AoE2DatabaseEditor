@@ -3,6 +3,8 @@ package com.aoedb.editor.data.items;
 
 import com.aoedb.editor.data.simple.Editable;
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.EcoStatView;
+import com.aoedb.editor.views.editable.EditableView;
 
 public class EcoStat extends Editable {
 
@@ -20,6 +22,11 @@ public class EcoStat extends Editable {
     @Override
     public String getType(){
         return Database.ECO_STAT;
+    }
+
+    @Override
+    public EditableView getEditableView() {
+        return new EcoStatView(this);
     }
 
     public String getValue() {

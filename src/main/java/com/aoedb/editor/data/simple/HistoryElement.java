@@ -1,6 +1,8 @@
 package com.aoedb.editor.data.simple;
 
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.EditableView;
+import com.aoedb.editor.views.editable.HistoryView;
 
 public class HistoryElement extends ImageEditable{
 
@@ -17,4 +19,11 @@ public class HistoryElement extends ImageEditable{
     public String getType(){
         return Database.HISTORY;
     }
+
+    @Override
+    public EditableView getEditableView() {
+        return new HistoryView(this);
+    }
+
+
 }

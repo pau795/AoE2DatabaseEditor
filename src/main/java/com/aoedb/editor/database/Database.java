@@ -8,6 +8,7 @@ import com.aoedb.editor.data.entity.Technology;
 import com.aoedb.editor.data.entity.Unit;
 import com.aoedb.editor.data.items.*;
 import com.aoedb.editor.data.simple.*;
+import org.apache.http.conn.util.PublicSuffixList;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.File;
@@ -42,6 +43,8 @@ public class Database {
     public static final String FOOD = "Food";
     public static final String GOLD = "Gold";
     public static final String STONE = "Stone";
+
+    public static final String ALL = "All";
 
     public static final String WOOD_ICON = "r_wood";
     public static final String FOOD_ICON = "r_food";
@@ -131,7 +134,7 @@ public class Database {
         Reader r = new Reader();
         currentLanguage = "en";
 
-        stringData = r.readStringData(Arrays.asList("en", "es", "de"));
+        stringData = r.readStringData(Arrays.asList("en", "es"));
 
         unitList = r.readUnits();
         buildingList = r.readBuildings();
@@ -164,6 +167,14 @@ public class Database {
         return stringData.getString(key, currentLanguage);
     }
 
+    public static  String getString(String key, String language){
+        return stringData.getString(key, language);
+    }
+
+    public static void setString(String key, String string, String language){
+        stringData.setString(key, string, language);
+    }
+
     public static  String getImage(String imageName){
         if (imageName.startsWith("g_")) return "images/"+imageName+".gif";
         else return "images/"+imageName+".png";
@@ -177,14 +188,18 @@ public class Database {
 
 
     public static  Unit getUnit(int id){
+        if (id == 0) return Unit.getNone();
         return unitList.get(id - 1);
     }
 
     public static  Building getBuilding(int id){
+        if (id == 0) return Building.getNone();
         return buildingList.get(id - 1);
     }
 
-    public static  Technology getTechnology(int id){
+    public static Technology getTechnology(int id){
+        if (id == 0) return Technology.getNone();
+        if (id == -1) return Technology.getDarkAge();
         return techList.get(id - 1);
     }
 
@@ -232,16 +247,57 @@ public class Database {
         return hiddenBonusList.get(id - 1);
     }
 
+    public static List<? extends Editable> getResourceList(){
+        return Arrays.asList(new ResourceElement(0), new ResourceElement(1), new ResourceElement(2), new ResourceElement(3), new ResourceElement(4));
+    }
 
+    public static List<? extends Editable> getEditableList(String type){
+        switch (type){
+            case Database.UNIT: {
+                List<Unit> list1 = new ArrayList<>(unitList);
+                list1.add(Unit.getNone());
+                return list1;
+            }
+            case Database.BUILDING: {
+                List<Building> list1 = new ArrayList<>(buildingList);
+                list1.add(Building.getNone());
+                return list1;
+            }
+            case Database.TECH:
+                List<Technology> list1 = new ArrayList<>(techList);
+                list1.add(Technology.getNone());
+                list1.add(Technology.getDarkAge());
+                return list1;
+            case Database.CIV: return civList;
+            case Database.CLASS: return classList;
+            case Database.TYPE: return typeList;
+            case Database.PERFORMANCE: return performanceList;
+            case Database.TAUNT: return tauntList;
+            case Database.HISTORY: return historyList;
+            case Database.STAT: return statList;
+            case Database.ECO_STAT: return ecoStatsList;
+            case Database.GATHERING_RATES: return gatheringRates;
+            case Database.BONUS: return bonusList;
+            case Database.HIDDEN_BONUS: return hiddenBonusList;
+            default: return null;
+        }
+    }
 
     public static Editable getEditable(String type, int id){
-        //TODO if (id == 0) return new ImageEditable(new ImageIdentifier(0, "none", "none", "t_white"));
         switch (type){
-            case Database.UNIT: return unitList.get(id - 1);
-            case Database.BUILDING: return buildingList.get(id - 1);
-            case Database.TECH:
-                //TODO if (id == -1) return new Technology(new ImageIdentifier(-1, "dark_age", Database.TECH, "t_dark_age"));
+            case Database.UNIT: {
+                if (id == 0) return Unit.getNone();
+                return unitList.get(id - 1);
+            }
+            case Database.BUILDING: {
+                if (id == 0) return Building.getNone();
+                return buildingList.get(id - 1);
+            }
+            case Database.TECH: {
+                if (id == 0) return Technology.getNone();
+                if (id == -1) return Technology.getDarkAge();
                 return techList.get(id - 1);
+            }
             case Database.CIV: return civList.get(id - 1);
             case Database.CLASS: return classList.get(id - 1);
             case Database.TYPE: return typeList.get(id - 1);
@@ -253,7 +309,7 @@ public class Database {
             case Database.GATHERING_RATES: return gatheringRates.get(id - 1);
             case Database.BONUS: return bonusList.get(id - 1);
             case Database.HIDDEN_BONUS: return hiddenBonusList.get(id - 1);
-            default: return null;
+            default:  return Unit.getNone();
         }
     }
 
@@ -268,6 +324,10 @@ public class Database {
             case Database.HISTORY_GROUPS: return historyGroups;
             default: return null;
         }
+    }
+
+    public static List<String> getStatListNames(){
+        return statList.stream().map(stat -> Utils.camelCase(Database.getString(stat.getName()))).collect(Collectors.toList());
     }
 
     public static List<Unit> getUnitList() {

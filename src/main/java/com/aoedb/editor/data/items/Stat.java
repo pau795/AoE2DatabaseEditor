@@ -3,6 +3,8 @@ package com.aoedb.editor.data.items;
 
 import com.aoedb.editor.data.simple.Editable;
 import com.aoedb.editor.database.Database;
+import com.aoedb.editor.views.editable.EditableView;
+import com.aoedb.editor.views.editable.StatView;
 
 public class Stat extends Editable {
     private Boolean addition;
@@ -27,5 +29,10 @@ public class Stat extends Editable {
     @Override
     public String getType(){
         return Database.STAT;
+    }
+
+    @Override
+    public EditableView getEditableView() {
+        return new StatView(this);
     }
 }

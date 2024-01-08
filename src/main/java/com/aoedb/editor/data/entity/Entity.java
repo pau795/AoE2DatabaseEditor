@@ -4,6 +4,7 @@ import com.aoedb.editor.data.simple.ImageEditable;
 import com.aoedb.editor.data.components.*;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class Entity extends ImageEditable {
@@ -33,6 +34,8 @@ public abstract class Entity extends ImageEditable {
     public void setCreatorID(int creatorID) {
         this.creatorID = creatorID;
     }
+
+    public abstract String getCreatorType();
 
     public int getAgeID() {
         return ageID;
@@ -64,6 +67,10 @@ public abstract class Entity extends ImageEditable {
 
     public void setStat(String stat, String value) {
         this.statMap.put(stat, value);
+    }
+
+    public Map<String, String> getStatMap(){
+        return statMap;
     }
 
     public Set<String> getStatList(){
@@ -106,4 +113,13 @@ public abstract class Entity extends ImageEditable {
         this.bonusContainer = bonusContainer;
     }
 
+    public Descriptor getDescriptor(){
+        Descriptor descriptor = new Descriptor();
+        descriptor.setNominative(String.format("%s_description_nominative_%d", this.getType(),  this.id));
+        descriptor.setQuickDescription(String.format("%s_description_quick_%d", this.getType(), this.id));
+        descriptor.setBriefDescription(String.format("%s_description_brief_%d", this.getType(), this.id));
+        descriptor.setLongDescription(String.format("%s_description_long_%d", this.getType(), this.id));
+        descriptor.setExtraDescription(String.format("%s_description_extra_%d", this.getType(), this.id));
+        return descriptor;
+    }
 }
