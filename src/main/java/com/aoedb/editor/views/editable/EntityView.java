@@ -27,18 +27,23 @@ public abstract class EntityView extends ImageEditableView {
 
         Accordion descriptionAccordion = new Accordion();
         descriptionAccordion.add("Descriptions", new DescriptionEditor(entity));
+        descriptionAccordion.close();
 
         Accordion baseAccordion = new Accordion();
         baseAccordion.add("Base info", new VerticalLayout(getBaseInfo()));
+        baseAccordion.close();
 
         Accordion statsAccordion = new Accordion();
         statsAccordion.add("Stats", new StatsEditor(entity.getStatMap()));
+        statsAccordion.close();
 
         Accordion upgradesAccordion = new Accordion();
         upgradesAccordion.add("Upgrades", new UpgradeEditor(entity.getUpgrades()));
+        upgradesAccordion.close();
 
         Accordion availabilityAccordion = new Accordion();
         availabilityAccordion.add("Availability", new AvailabilityEditor<>(entity));
+        availabilityAccordion.close();
 
         mainLayout.add(descriptionAccordion, baseAccordion, statsAccordion, upgradesAccordion, availabilityAccordion);
         return mainLayout;

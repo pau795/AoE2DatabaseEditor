@@ -118,6 +118,10 @@ public class Civilization extends ImageEditable {
         this.uniqueBuilding = uniqueBuilding;
     }
 
-
+    public static Civilization getNone(){
+        Civilization none = new Civilization(0);
+        none.setImagePath("t_white");
+        return none;
+    }
 
 }

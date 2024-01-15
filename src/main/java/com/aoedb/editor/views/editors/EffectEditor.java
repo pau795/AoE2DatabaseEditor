@@ -18,9 +18,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class EffectEditor extends VerticalLayout {
 
@@ -81,6 +79,12 @@ public class EffectEditor extends VerticalLayout {
         Button addAttackEffectButton = new Button(VaadinIcon.PLUS.create());
         Button addArmorEffectButton = new Button(VaadinIcon.PLUS.create());
 
+        addStatEffectButton.setText("Add Stat Effect");
+        addCostEffectButton.setText("Add Cost Effect");
+        addEcoEffectButton.setText("Add Eco Effect");
+        addAttackEffectButton.setText("Add Attack Effect");
+        addArmorEffectButton.setText("Add Armor Effect");
+
         addStatEffectButton.addClickListener(event -> statsEffectList.add(new EffectLayout(new EffectItem(container.isStaggered()), EffectContainer.STAT)));
         addCostEffectButton.addClickListener(event -> costEffectList.add(new EffectLayout(new EffectItem(container.isStaggered()), EffectContainer.COST)));
         addEcoEffectButton.addClickListener(event -> ecoEffectList.add(new EffectLayout(new EffectItem(container.isStaggered()), EffectContainer.ECO)));
@@ -131,10 +135,15 @@ public class EffectEditor extends VerticalLayout {
     private class EffectLayout extends VerticalLayout {
 
         NumberField singleValue, darkAgeValue, feudalAgeValue, castleAgeValue, imperialAgeValue;
-        
+
+        HashMap<String, List<Integer>> filterIdsByFilterType;
+
+        EffectItem effectItem;
         Div filterGrid;
         
         public EffectLayout(EffectItem effectItem, String effectType) {
+
+            this.effectItem = effectItem;
 
             EditableSelector techSelector = new EditableSelector(Database.getTechnology(effectItem.getTechRequirement()));
             techSelector.setEditableChangedListener(tech -> effectItem.setTechRequirement(tech.getId()));
@@ -152,17 +161,6 @@ public class EffectEditor extends VerticalLayout {
             operatorSelector.setValue(effectItem.getOperator());
             operatorSelector.addValueChangeListener(event -> effectItem.setOperator(event.getValue()));
             operatorSelector.setLabel("Operator");
-
-
-            Select<String> effectFilter = new Select<>();
-            effectFilter.setItems(EffectItem.FILTER_LIST);
-            effectFilter.addValueChangeListener(event -> {
-                effectItem.setFilter(event.getValue());
-                techSelector.setVisible(event.getValue().equals(EffectContainer.TECH_REQUIREMENT));
-                afSecProj.setVisible(!event.getValue().equals(EffectContainer.NONE));
-            });
-            effectFilter.setValue(effectItem.getFilter());
-            effectFilter.setLabel("Filter Type");
 
             ComboBox<Editable> statSelector = new ComboBox<>();
             ComboBox.ItemFilter<Editable> filter = (editable1, filterString) -> editable1.getType().toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT)) || Database.getString(editable1.getName()).toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT));
@@ -196,6 +194,7 @@ public class EffectEditor extends VerticalLayout {
 
 
             Button deleteEffectButton = new Button(VaadinIcon.TRASH.create());
+            deleteEffectButton.setText("Delete Effect");
             deleteEffectButton.addClassNames("margin-match-label");
             deleteEffectButton.addClickListener(event -> {
                 switch (effectType) {
@@ -215,6 +214,15 @@ public class EffectEditor extends VerticalLayout {
                         armorEffectList.remove(this);
                         break;
                 }
+            });
+
+            Button addFilterEntityButton = new Button(VaadinIcon.PLUS.create());
+            addFilterEntityButton.setText("Add Filter Entity");
+            addFilterEntityButton.addClassNames("margin-match-label");
+            addFilterEntityButton.setEnabled(!effectItem.getFilter().equals(EffectContainer.NONE) && !effectItem.getFilter().equals(EffectContainer.TECH_REQUIREMENT));
+            addFilterEntityButton.addClickListener(event -> {
+                filterIdsByFilterType.get(effectItem.getFilter()).add(0);
+                addFilterGridItem(0);
             });
 
             singleValue = new NumberField();
@@ -243,32 +251,37 @@ public class EffectEditor extends VerticalLayout {
 
             HorizontalLayout effectStatLayout = new HorizontalLayout();
             effectStatLayout.setAlignItems(Alignment.CENTER);
-            effectStatLayout.add(statSelector, operatorSelector, singleValue, darkAgeValue, feudalAgeValue, castleAgeValue, imperialAgeValue, deleteEffectButton);
+            effectStatLayout.add(statSelector, operatorSelector, singleValue, darkAgeValue, feudalAgeValue, castleAgeValue, imperialAgeValue, addFilterEntityButton, deleteEffectButton);
 
             VerticalLayout mainFilterLayout = new VerticalLayout();
             mainFilterLayout.setPadding(false);
 
-            HorizontalLayout effectFilterLayout = new HorizontalLayout();
-            effectFilterLayout.setAlignItems(Alignment.CENTER);
-            effectFilterLayout.add(effectFilter, techSelector, afSecProj);
+
 
             filterGrid = new Div();
             filterGrid.addClassNames("entities-layout-grid", "standard-horizontal-padding");
-            if (!effectItem.getFilter().equals(EffectContainer.NONE) && !effectItem.getFilter().equals(EffectContainer.TECH_REQUIREMENT)) {
-                effectItem.getFilterEntitiesIDs().forEach(id -> {
-                    EditableSelector entitySelector = new EditableSelector(Database.getEditable(effectItem.getFilter(), id));
-                    entitySelector.setDeleteButton(true);
-                    entitySelector.setEditableChangedListener(entity -> {
-                        effectItem.getFilterEntitiesIDs().remove(id);
-                        effectItem.getFilterEntitiesIDs().add(entity.getId());
-                    });
-                    entitySelector.setRemoveEditableListener(event -> {
-                        effectItem.getFilterEntitiesIDs().remove(id);
-                        filterGrid.remove(entitySelector);
-                    });
-                    filterGrid.add(entitySelector);
-                });
-            }
+            populateFilterIdsGrid();
+
+            filterIdsByFilterType = new HashMap<>();
+            for(String type : EffectItem.FILTER_LIST) filterIdsByFilterType.put(type, new ArrayList<>());
+            filterIdsByFilterType.put(effectItem.getFilter(), effectItem.getFilterEntitiesIDs());
+
+            Select<String> effectFilter = new Select<>();
+            effectFilter.setItems(EffectItem.FILTER_LIST);
+            effectFilter.addValueChangeListener(event -> {
+                effectItem.setFilter(event.getValue());
+                techSelector.setVisible(event.getValue().equals(EffectContainer.TECH_REQUIREMENT));
+                afSecProj.setVisible(!event.getValue().equals(EffectContainer.NONE));
+                effectItem.setFilterEntitiesIDs(filterIdsByFilterType.get(effectItem.getFilter()));
+                populateFilterIdsGrid();
+                addFilterEntityButton.setEnabled(!effectItem.getFilter().equals(EffectContainer.NONE) && !effectItem.getFilter().equals(EffectContainer.TECH_REQUIREMENT));
+            });
+            effectFilter.setValue(effectItem.getFilter());
+            effectFilter.setLabel("Filter Type");
+
+            HorizontalLayout effectFilterLayout = new HorizontalLayout();
+            effectFilterLayout.setAlignItems(Alignment.CENTER);
+            effectFilterLayout.add(effectFilter, techSelector, afSecProj);
 
             mainFilterLayout.add(effectFilterLayout, filterGrid);
 
@@ -286,6 +299,26 @@ public class EffectEditor extends VerticalLayout {
             feudalAgeValue.setVisible(staggered);
             castleAgeValue.setVisible(staggered);
             imperialAgeValue.setVisible(staggered);
+        }
+
+        private void populateFilterIdsGrid(){
+            filterGrid.removeAll();
+            if (!effectItem.getFilter().equals(EffectContainer.NONE) && !effectItem.getFilter().equals(EffectContainer.TECH_REQUIREMENT))
+                effectItem.getFilterEntitiesIDs().forEach(this::addFilterGridItem);
+        }
+
+        private void addFilterGridItem(Integer id){
+            EditableSelector entitySelector = new EditableSelector(Database.getEditable(effectItem.getFilter(), id));
+            entitySelector.setDeleteButton(true);
+            entitySelector.setEditableChangedListener(entity -> {
+                filterIdsByFilterType.get(effectItem.getFilter()).remove(Integer.valueOf(entitySelector.getEditable().getId()));
+                filterIdsByFilterType.get(effectItem.getFilter()).add(entity.getId());
+            });
+            entitySelector.setRemoveEditableListener(event -> {
+                filterIdsByFilterType.get(effectItem.getFilter()).remove(id);
+                filterGrid.remove(entitySelector);
+            });
+            filterGrid.add(entitySelector);
         }
     }
 

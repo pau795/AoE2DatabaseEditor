@@ -298,8 +298,14 @@ public class Database {
                 if (id == -1) return Technology.getDarkAge();
                 return techList.get(id - 1);
             }
-            case Database.CIV: return civList.get(id - 1);
-            case Database.CLASS: return classList.get(id - 1);
+            case Database.CIV: {
+                if (id == 0) return Civilization.getNone();
+                return civList.get(id - 1);
+            }
+            case Database.CLASS: {
+                if (id == 0) return ClassElement.getNone();
+                return classList.get(id - 1);
+            }
             case Database.TYPE: return typeList.get(id - 1);
             case Database.PERFORMANCE: return performanceList.get(id - 1);
             case Database.TAUNT: return tauntList.get(id - 1);

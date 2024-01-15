@@ -22,6 +22,7 @@ public class TechnologyView extends EntityView {
 
         Accordion techEffectAccordion = new Accordion();
         techEffectAccordion.add("Tech Effect", new EffectEditor(technology.getTechEffect()));
+        techEffectAccordion.close();
 
         mainLayout.add(techEffectAccordion);
         return mainLayout;

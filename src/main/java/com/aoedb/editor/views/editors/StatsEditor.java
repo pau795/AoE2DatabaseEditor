@@ -24,6 +24,7 @@ public class StatsEditor extends VerticalLayout {
         this.statLayout = new Div();
         this.statLayout.addClassNames("layout-grid");
         Button button = new Button(VaadinIcon.PLUS.create());
+        button.setText("Add Stat");
         button.addClickListener(event ->{
            HorizontalLayout newStat = statPanel("","-");
            statLayout.add(newStat);

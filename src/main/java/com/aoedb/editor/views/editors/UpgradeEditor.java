@@ -22,6 +22,7 @@ public class UpgradeEditor extends VerticalLayout {
         listLayout.addClassNames("black-border-bottom");
         for (UpgradeList upgrade: upgradesContainer.getExpandableList()) listLayout.add(upgradesByBuilding(upgrade));
         Button addButton = new Button(VaadinIcon.PLUS.create());
+        addButton.setText("Add Upgrade Category");
         addButton.addClickListener(event -> {
             UpgradeList newUpgradeList = new UpgradeList(0);
             upgradesContainer.addUpgradeList(newUpgradeList);
@@ -38,6 +39,7 @@ public class UpgradeEditor extends VerticalLayout {
         EditableSelector buildingSelector = new EditableSelector(Database.getBuilding(upgradeList.getElementID()));
         buildingSelector.setEditableChangedListener(building -> upgradeList.setElementID(building.getId()));
         Button addTech = new Button(VaadinIcon.PLUS.create());
+        addTech.setText("Add Upgrade");
         addTech.addClickListener(event -> {
             int id = 0;
             upgradeList.getSubList().add(0);
@@ -55,6 +57,7 @@ public class UpgradeEditor extends VerticalLayout {
             gridContainer.add(technologySelector);
         });
         Button removeHeader = new Button(VaadinIcon.TRASH.create());
+        removeHeader.setText("Remove Upgrade Category");
         removeHeader.addClickListener(event -> {
            upgradesContainer.removeUpgradeList(upgradeList);
            listLayout.remove(mainContainer);

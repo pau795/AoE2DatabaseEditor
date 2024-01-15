@@ -1,5 +1,6 @@
 package com.aoedb.editor.data.simple;
 
+import com.aoedb.editor.data.entity.Unit;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.editable.ClassView;
 import com.aoedb.editor.views.editable.EditableView;
@@ -23,5 +24,11 @@ public class ClassElement extends ImageEditable{
     @Override
     public EditableView getEditableView() {
         return new ClassView(this);
+    }
+
+    public static ClassElement getNone(){
+        ClassElement none = new ClassElement(0);
+        none.setImagePath("t_white");
+        return none;
     }
 }

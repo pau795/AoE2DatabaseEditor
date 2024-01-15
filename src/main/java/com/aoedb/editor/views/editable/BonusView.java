@@ -20,6 +20,7 @@ public abstract class BonusView extends EditableView{
 
         Accordion bonusEditor = new Accordion();
         bonusEditor.add("Bonus Effect", new EffectEditor(this.bonus.getBonusEffect()));
+        bonusEditor.close();
 
         mainLayout.add(bonusEditor);
         return mainLayout;

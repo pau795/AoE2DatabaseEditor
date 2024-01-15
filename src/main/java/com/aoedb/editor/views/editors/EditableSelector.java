@@ -32,8 +32,11 @@ public class EditableSelector extends HorizontalLayout {
 
     private final Button deleteButton;
 
+    private Editable editable;
+
     public EditableSelector(Editable editable){
 
+        this.editable = editable;
         ComboBox<Editable> entitySelector =  new ComboBox<>();
         ComboBox.ItemFilter<Editable> filter = (editable1, filterString) -> editable1.getType().toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT)) || Database.getString(editable1.getName()).toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT));
         entitySelector.setItems(filter, (Collection<Editable>) Database.getEditableList(editable.getType()));
@@ -49,6 +52,7 @@ public class EditableSelector extends HorizontalLayout {
             entityLabel.setWidth("150px");
             addComponentAsFirst(entityLabel);
             if (editableChangedListener !=  null) editableChangedListener.onChange(ed);
+            this.editable = ed;
         });
         entityLabel = editable.getEditableView().getLabel();
         entityLabel.setWidth("150px");
@@ -71,5 +75,9 @@ public class EditableSelector extends HorizontalLayout {
 
     public void setRemoveEditableListener(RemoveEditableListener removeEditableListener) {
         this.removeEditableListener = removeEditableListener;
+    }
+
+    public Editable getEditable(){
+        return editable;
     }
 }

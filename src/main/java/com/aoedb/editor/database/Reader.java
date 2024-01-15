@@ -542,8 +542,7 @@ public class Reader {
                 ArrayList<Integer> filterIds = new ArrayList<>();
                 String[] fIDs = filter.getAttribute("ids").split(" ");
                 for (String s : fIDs){
-                    if (s.equals("@")) filterIds.add(-1);
-                    else filterIds.add(Integer.parseInt(s));
+                    if (!s.equals("@")) filterIds.add(Integer.parseInt(s));
                 }
                 effect.setFilterEntitiesIDs(filterIds);
             }

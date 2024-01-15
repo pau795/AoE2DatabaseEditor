@@ -30,6 +30,7 @@ public abstract class EditableView {
         mainLayout.addClassNames("editable-component-base-layout");
         TypeIdLabel typeIdLabel = new TypeIdLabel(editable);
         Accordion nameAccordion = new Accordion();
+
         nameAccordion.add("Name", new VerticalLayout(new StringEditor(editable.getName())));
         Accordion idAccordion = new Accordion();
         idAccordion.add("ID", typeIdLabel);
