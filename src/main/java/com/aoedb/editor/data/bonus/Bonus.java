@@ -18,4 +18,5 @@ public abstract class Bonus extends Editable {
     public void setBonusEffect(EffectContainer bonusEffect) {
         this.bonusEffect = bonusEffect;
     }
+
 }

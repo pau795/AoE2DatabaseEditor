@@ -204,6 +204,7 @@ public class Database {
     }
 
     public static  Civilization getCivilization(int id){
+        if (id == 0) return Civilization.getNone();
         return civList.get(id - 1);
     }
 
@@ -240,10 +241,12 @@ public class Database {
     }
 
     public static  CivBonus getBonus(int id){
+        if (id == 0) return CivBonus.getNone();
         return bonusList.get(id - 1);
     }
 
     public static  HiddenBonus getHiddenBonus(int id){
+        if (id == 0) return HiddenBonus.getNone();
         return hiddenBonusList.get(id - 1);
     }
 
@@ -263,11 +266,12 @@ public class Database {
                 list1.add(Building.getNone());
                 return list1;
             }
-            case Database.TECH:
+            case Database.TECH: {
                 List<Technology> list1 = new ArrayList<>(techList);
                 list1.add(Technology.getNone());
                 list1.add(Technology.getDarkAge());
                 return list1;
+            }
             case Database.CIV: return civList;
             case Database.CLASS: return classList;
             case Database.TYPE: return typeList;
@@ -277,8 +281,16 @@ public class Database {
             case Database.STAT: return statList;
             case Database.ECO_STAT: return ecoStatsList;
             case Database.GATHERING_RATES: return gatheringRates;
-            case Database.BONUS: return bonusList;
-            case Database.HIDDEN_BONUS: return hiddenBonusList;
+            case Database.BONUS: {
+                List<CivBonus> list1 = new ArrayList<>(bonusList);
+                list1.add(CivBonus.getNone());
+                return list1;
+            }
+            case Database.HIDDEN_BONUS: {
+                List<HiddenBonus> list1 = new ArrayList<>(hiddenBonusList);
+                list1.add(HiddenBonus.getNone());
+                return list1;
+            }
             default: return null;
         }
     }
@@ -313,8 +325,14 @@ public class Database {
             case Database.STAT: return statList.get(id - 1);
             case Database.ECO_STAT: return ecoStatsList.get(id - 1);
             case Database.GATHERING_RATES: return gatheringRates.get(id - 1);
-            case Database.BONUS: return bonusList.get(id - 1);
-            case Database.HIDDEN_BONUS: return hiddenBonusList.get(id - 1);
+            case Database.BONUS: {
+                if (id == 0) return CivBonus.getNone();
+                return bonusList.get(id - 1);
+            }
+            case Database.HIDDEN_BONUS: {
+                if (id == 0) return HiddenBonus.getNone();
+                return hiddenBonusList.get(id - 1);
+            }
             default:  return Unit.getNone();
         }
     }

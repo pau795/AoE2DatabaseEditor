@@ -43,7 +43,12 @@ public abstract class EditableView {
         Div layout =  new Div();
         layout.addClassNames("editable-label-layout");
         String name1 = Database.getString(this.editable.getName());
-        Label name = new Label(name1);
+        Label name = new Label();
+        if (name1.length() > 30) {
+            name.getElement().setProperty("title", name1);
+            name1 = name1.substring(0, 30) + "...";
+        }
+        name.setText(name1);
         name.addClassNames("editable-label-name");
         layout.add(name);
         return layout;

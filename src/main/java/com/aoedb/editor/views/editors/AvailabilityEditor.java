@@ -1,7 +1,7 @@
 package com.aoedb.editor.views.editors;
 
+import com.aoedb.editor.data.components.Availability;
 import com.aoedb.editor.data.entity.Civilization;
-import com.aoedb.editor.data.entity.Entity;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.components.Divider;
 import com.vaadin.flow.component.Component;
@@ -16,11 +16,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AvailabilityEditor<E extends Entity> extends HorizontalLayout {
+public class AvailabilityEditor extends HorizontalLayout {
 
-    public AvailabilityEditor(E entity){
+    public AvailabilityEditor(Availability availability){
         List<Civilization> civilizationList = Database.getCivList();
-        List<Civilization> availableCivs = entity.getAvailability().getAvailableCivs().stream().map(Database::getCivilization).collect(Collectors.toList());
+        List<Civilization> availableCivs = availability.getAvailableCivs().stream().map(Database::getCivilization).collect(Collectors.toList());
         List<Civilization> unavailableCivs = civilizationList.stream().filter(e -> !availableCivs.contains(e)).collect(Collectors.toList());
 
         VerticalLayout availablePanel =  new VerticalLayout();
@@ -44,8 +44,8 @@ public class AvailabilityEditor<E extends Entity> extends HorizontalLayout {
             event.getDragSourceComponent().ifPresent(availableDropPanel::add);
             event.getDragSourceComponent().ifPresent(component -> {
                 int civID = ((DragCivLabel) component).getCivilization().getId();
-                entity.getAvailability().getAvailableCivs().add(civID);
-                Collections.sort(entity.getAvailability().getAvailableCivs());
+                availability.getAvailableCivs().add(civID);
+                Collections.sort(availability.getAvailableCivs());
             });
         });
         DropTarget<VerticalLayout> unavailableDropTarget = DropTarget.create(unavailableDropPanel);
@@ -53,8 +53,8 @@ public class AvailabilityEditor<E extends Entity> extends HorizontalLayout {
             event.getDragSourceComponent().ifPresent(unavailableDropPanel::add);
             event.getDragSourceComponent().ifPresent(component -> {
                 int civID = ((DragCivLabel) component).getCivilization().getId();
-                entity.getAvailability().getAvailableCivs().remove(Integer.valueOf(civID));
-                Collections.sort(entity.getAvailability().getAvailableCivs());
+                availability.getAvailableCivs().remove(Integer.valueOf(civID));
+                Collections.sort(availability.getAvailableCivs());
             });
         });
         availablePanel.add(availableHeader, new Divider(false), availableDropPanel);

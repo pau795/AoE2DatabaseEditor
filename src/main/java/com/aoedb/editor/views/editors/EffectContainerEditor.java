@@ -20,7 +20,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import java.util.*;
 
-public class EffectEditor extends VerticalLayout {
+public class EffectContainerEditor extends VerticalLayout {
 
     VerticalLayout statsEffectList;
     VerticalLayout costEffectList;
@@ -28,7 +28,7 @@ public class EffectEditor extends VerticalLayout {
     VerticalLayout attackEffectList;
     VerticalLayout armorEffectList;
 
-    public EffectEditor(EffectContainer container){
+    public EffectContainerEditor(EffectContainer container){
 
         VerticalLayout statEffectsLayout = new VerticalLayout();
         VerticalLayout costEffectsLayout = new VerticalLayout();
@@ -42,11 +42,11 @@ public class EffectEditor extends VerticalLayout {
         Label attackEffectLabel = new Label("Attack Effects");
         Label armorEffectLabel = new Label("Armor Effects");
 
-        statEffectLabel.setClassName("bonus-effect-category-title");
-        costEffectLabel.setClassName("bonus-effect-category-title");
-        ecoEffectLabel.setClassName("bonus-effect-category-title");
-        attackEffectLabel.setClassName("bonus-effect-category-title");
-        armorEffectLabel.setClassName("bonus-effect-category-title");
+        statEffectLabel.setClassName("category-title");
+        costEffectLabel.setClassName("category-title");
+        ecoEffectLabel.setClassName("category-title");
+        attackEffectLabel.setClassName("category-title");
+        armorEffectLabel.setClassName("category-title");
 
         statsEffectList = new VerticalLayout();
         costEffectList = new VerticalLayout();
@@ -315,7 +315,7 @@ public class EffectEditor extends VerticalLayout {
                 filterIdsByFilterType.get(effectItem.getFilter()).add(entity.getId());
             });
             entitySelector.setRemoveEditableListener(event -> {
-                filterIdsByFilterType.get(effectItem.getFilter()).remove(id);
+                filterIdsByFilterType.get(effectItem.getFilter()).remove(Integer.valueOf(entitySelector.getEditable().getId()));
                 filterGrid.remove(entitySelector);
             });
             filterGrid.add(entitySelector);

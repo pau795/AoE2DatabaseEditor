@@ -12,6 +12,7 @@ public class HiddenBonus extends Bonus{
 
     @Override
     public String getName() {
+        if (id == 0) return "none";
         return String.format("hidden_bonus_name_%d", this.id);
     }
 
@@ -23,6 +24,10 @@ public class HiddenBonus extends Bonus{
     @Override
     public EditableView getEditableView() {
         return new HiddenBonusView(this);
+    }
+
+    public static HiddenBonus getNone(){
+        return new HiddenBonus(0);
     }
 
 }

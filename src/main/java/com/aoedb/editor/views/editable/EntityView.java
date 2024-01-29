@@ -42,10 +42,14 @@ public abstract class EntityView extends ImageEditableView {
         upgradesAccordion.close();
 
         Accordion availabilityAccordion = new Accordion();
-        availabilityAccordion.add("Availability", new AvailabilityEditor<>(entity));
+        availabilityAccordion.add("Availability", new AvailabilityEditor(entity.getAvailability()));
         availabilityAccordion.close();
 
-        mainLayout.add(descriptionAccordion, baseAccordion, statsAccordion, upgradesAccordion, availabilityAccordion);
+        Accordion bonusContainerAccordion = new Accordion();
+        bonusContainerAccordion.add("Bonuses", new BonusContainerEditor(entity.getBonusContainer()));
+        bonusContainerAccordion.close();
+
+        mainLayout.add(descriptionAccordion, baseAccordion, statsAccordion, upgradesAccordion, availabilityAccordion, bonusContainerAccordion);
         return mainLayout;
     }
 
