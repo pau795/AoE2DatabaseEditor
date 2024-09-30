@@ -4,7 +4,7 @@ package com.aoedb.editor.views;
 import com.aoedb.editor.data.simple.Editable;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.pages.EditEditableView;
-import com.aoedb.editor.views.pages.EmptyView;
+import com.aoedb.editor.views.pages.MainView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -125,7 +125,7 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Main", EmptyView.class), //
+                new MenuItemInfo("Main", MainView.class), //
 
         };
     }

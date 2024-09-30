@@ -13,6 +13,14 @@ public abstract class Item extends Entity{
         super(id);
     }
 
+    public Item(int id, Item mainItem, Item statsItem,  Item attackItem, Item armorItem, Item upgradesItem, Item availabilityItem, Item bonusItem) {
+        super(id, mainItem, statsItem, upgradesItem, availabilityItem, bonusItem);
+        this.classID = mainItem.getClassID();
+        this.upgradedFromID = mainItem.getId();
+        this.attackList = new TypeValues(attackItem.getAttackList());
+        this.armorList = new TypeValues(armorItem.getArmorList());
+    }
+
     public int getClassID() {
         return classID;
     }

@@ -2,6 +2,7 @@ package com.aoedb.editor.data.entity;
 
 import com.aoedb.editor.data.simple.ImageEditable;
 import com.aoedb.editor.data.components.*;
+import com.aoedb.editor.database.Database;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,14 +17,43 @@ public abstract class Entity extends ImageEditable {
     LinkedHashMap<String, String> statMap;
     LinkedHashMap<String, Integer> costMap;
 
-    Upgrades upgrades;
     Availability availability;
+    Upgrades upgrades;
     BonusContainer bonusContainer;
 
     public Entity(int id) {
         super(id);
         statMap = new LinkedHashMap<>();
         costMap = new LinkedHashMap<>();
+    }
+
+    public Entity(int id, Entity mainEntity, Entity statsEntity, Entity availabilityEntity, Entity upgradesEntity, Entity bonusEntity) {
+        super(id, mainEntity);
+        statMap = new LinkedHashMap<>();
+        costMap = new LinkedHashMap<>();
+
+        Descriptor descriptor = mainEntity.getDescriptor();
+        Database.setString(String.format("%s_description_nominative_%d", this.getType(),  this.id), Database.getString(descriptor.getNominative(), "en"), "en");
+        Database.setString(String.format("%s_description_quick_%d", this.getType(), this.id),  Database.getString(descriptor.getQuickDescription(), "en"), "en");
+        Database.setString(String.format("%s_description_brief_%d", this.getType(), this.id),  Database.getString(descriptor.getBriefDescription(), "en"), "en");
+        Database.setString(String.format("%s_description_long_%d", this.getType(), this.id),  Database.getString(descriptor.getLongDescription(), "en"), "en");
+        Database.setString(String.format("%s_description_extra_%d", this.getType(), this.id),  Database.getString(descriptor.getExtraDescription(), "en"), "en");
+
+        Database.setString(String.format("%s_description_nominative_%d", this.getType(),  this.id), Database.getString(descriptor.getNominative(), "es"), "es");
+        Database.setString(String.format("%s_description_quick_%d", this.getType(), this.id),  Database.getString(descriptor.getQuickDescription(), "es"), "es");
+        Database.setString(String.format("%s_description_brief_%d", this.getType(), this.id),  Database.getString(descriptor.getBriefDescription(), "es"), "es");
+        Database.setString(String.format("%s_description_long_%d", this.getType(), this.id),  Database.getString(descriptor.getLongDescription(), "es"), "es");
+        Database.setString(String.format("%s_description_extra_%d", this.getType(), this.id),  Database.getString(descriptor.getExtraDescription(), "es"), "es");
+
+        this.creatorID = mainEntity.getCreatorID();
+        this.ageID = mainEntity.getAgeID();
+        this.requiredTechnologyID = mainEntity.getRequiredTechnologyID();
+        this.nextUpgradeID = mainEntity.getNextUpgradeID();
+        this.statMap.putAll(statsEntity.getStatMap());
+        this.costMap.putAll(statsEntity.getCostMap());
+        this.availability = new Availability(availabilityEntity.getAvailability());
+        this.upgrades = new Upgrades(upgradesEntity.getUpgrades());
+        this.bonusContainer = new BonusContainer(bonusEntity.getBonusContainer());
     }
 
 
@@ -71,6 +101,10 @@ public abstract class Entity extends ImageEditable {
 
     public Map<String, String> getStatMap(){
         return statMap;
+    }
+
+    public Map<String, Integer> getCostMap(){
+        return costMap;
     }
 
     public Set<String> getStatList(){

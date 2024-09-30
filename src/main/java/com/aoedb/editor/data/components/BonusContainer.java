@@ -1,5 +1,6 @@
 package com.aoedb.editor.data.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BonusContainer {
@@ -7,6 +8,15 @@ public class BonusContainer {
     private List<Integer> teamBonusList;
     private List<Integer> hiddenBonusList;
     private List<Integer> uniqueTechList;
+
+    public BonusContainer() {}
+
+    public BonusContainer(BonusContainer other) {
+        this.bonusList = new ArrayList<>(other.getBonusList());
+        this.teamBonusList = new ArrayList<>(other.getTeamBonusList());
+        this.hiddenBonusList = new ArrayList<>(other.getHiddenBonusList());
+        this.uniqueTechList = new ArrayList<>(other.getUniqueTechList());
+    }
 
     public List<Integer> getBonusList() {
         return bonusList;

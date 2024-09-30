@@ -19,9 +19,40 @@
     width: 100%
 }
 
+.new-editable-grid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(350px, 1fr));
+    gap: 10px;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.selector-title{
+    padding-top: 10px;
+    font-search: 14px;
+    font-weight: bold;
+}
+
+hr{
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
 .editable-label-name{
     font-size: 14px;
     font-weight: bold;
+}
+
+.new-editable-button{
+    margin-top: 5px;
+    margin-bottm: 5px;
+    align-self: end;
+}
+
+.dialog-title{
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .editable-label-id{

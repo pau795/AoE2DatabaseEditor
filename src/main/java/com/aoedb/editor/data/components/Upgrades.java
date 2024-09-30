@@ -13,6 +13,12 @@ public class Upgrades {
             this.elementID = elementID;
             this.subList = new ArrayList<>();
         }
+
+        public UpgradeList(UpgradeList other){
+            this.elementID = other.elementID;
+            this.subList = new ArrayList<>(other.subList);
+        }
+
         public int getElementID() {
             return elementID;
         }
@@ -31,6 +37,13 @@ public class Upgrades {
     }
 
     private List<UpgradeList> expandableList;
+
+    public Upgrades() {}
+
+    public Upgrades(Upgrades other){
+        this.expandableList = new ArrayList<>();
+        for(UpgradeList ul : other.getExpandableList()) this.expandableList.add(new UpgradeList(ul));
+    }
 
     public List<UpgradeList> getExpandableList() {
         return expandableList;

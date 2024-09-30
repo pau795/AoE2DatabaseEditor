@@ -17,6 +17,12 @@ public abstract class Editable implements Serializable {
         this.id = id;
     }
 
+    public Editable(int id, Editable mainEditable){
+        this.id = id;
+        Database.setString(String.format("%s_name_%d", this.getType(), this.id), Database.getString(mainEditable.getName(), "en"), "en");
+        Database.setString(String.format("%s_name_%d",this.getType(), this.id), Database.getString(mainEditable.getName(), "es"), "es");
+    }
+
     public int getId() {
         return id;
     }

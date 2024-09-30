@@ -1,13 +1,25 @@
 package com.aoedb.editor.data.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TypeValues {
 
     public static class TypeList{
 
-        String name;
-        List<TypeElement> typeElements;
+        private String name;
+        private List<TypeElement> typeElements;
+
+        public TypeList(){}
+
+        public TypeList(TypeList other){
+            this.name = other.name;
+            this.typeElements = new ArrayList<>();
+            for(TypeElement te : other.typeElements){
+                TypeElement newTe = new TypeElement(te);
+                this.typeElements.add(newTe);
+            }
+        }
 
         public String getName() {
             return name;
@@ -27,8 +39,15 @@ public class TypeValues {
     }
 
     public static class TypeElement{
-        Integer typeID;
-        Double TypeValue;
+        private Integer typeID;
+        private Double TypeValue;
+
+        public TypeElement(){}
+
+        public TypeElement(TypeElement other){
+            this.typeID = other.typeID;
+            this.TypeValue = other.TypeValue;
+        }
 
         public int getTypeID() {
             return typeID;
@@ -47,7 +66,17 @@ public class TypeValues {
         }
     }
 
-    List<TypeList> typeLists;
+    private List<TypeList> typeLists;
+
+    public TypeValues(){}
+
+    public TypeValues(TypeValues other){
+        this.typeLists = new ArrayList<>();
+        for(TypeList tl : other.typeLists){
+            TypeList newTl = new TypeList(tl);
+            this.typeLists.add(newTl);
+        }
+    }
 
     public List<TypeList> getTypeLists() {
         return typeLists;

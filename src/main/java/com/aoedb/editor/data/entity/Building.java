@@ -14,6 +14,13 @@ public class Building extends Item{
         super(id);
     }
 
+    public Building(int id, Building mainBuilding, Building statBuilding, Building attackBuilding, Building armorBuilding,
+                    Building upgradesBuilding, Building availabilityBuilding, Building trainableBuilding, Building bonusBuilding) {
+        super(id, mainBuilding, statBuilding, attackBuilding, armorBuilding, upgradesBuilding, availabilityBuilding, bonusBuilding);
+        this.requiredBuilding = mainBuilding.getRequiredBuilding();
+        this.trainable = new Trainable(trainableBuilding.getTrainable());
+    }
+
     @Override
     public String getName(){
         if (id == 0) return "none";

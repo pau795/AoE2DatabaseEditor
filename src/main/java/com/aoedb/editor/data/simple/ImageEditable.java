@@ -13,6 +13,11 @@ public abstract class ImageEditable extends Editable {
         super(id);
     }
 
+    public ImageEditable(int id, ImageEditable mainImageEditable){
+        super(id, mainImageEditable);
+        this.imagePath = mainImageEditable.imagePath;
+    }
+
     public String getImagePath() {
         return imagePath;
     }

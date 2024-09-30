@@ -106,30 +106,34 @@ public class EffectContainerEditor extends VerticalLayout {
             globalFilter.setValue(container.getGlobalFilter());
             globalFilter.addValueChangeListener(event -> container.setGlobalFilter(event.getValue()));
 
-            Checkbox teamBonus = new Checkbox();
-            teamBonus.setLabel("Team Bonus");
-            teamBonus.setValue(container.isTeamBonus());
-            teamBonus.addValueChangeListener(event -> container.setTeamBonus(event.getValue()));
-
-            Checkbox staggered = new Checkbox();
-            staggered.setLabel("Staggered");
-            staggered.setValue(container.isStaggered());
-            staggered.addValueChangeListener(event -> {
-                container.setStaggered(event.getValue());
-                statsEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
-                costEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
-                ecoEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
-                attackEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
-                armorEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
-            });
-
-
-            HorizontalLayout globalSettingsLayout = new HorizontalLayout(civSelector, new Label("Global Filter"), globalFilter, teamBonus, staggered);
-            globalSettingsLayout.setAlignItems(Alignment.CENTER);
+            HorizontalLayout globalSettingsLayout = getGlobalSettingsLayout(container, civSelector, globalFilter);
             add(globalSettingsLayout);
         }
         add(statEffectsLayout, costEffectsLayout, ecoEffectsLayout, attackEffectsLayout, armorEffectsLayout);
 
+    }
+
+    private HorizontalLayout getGlobalSettingsLayout(EffectContainer container, EditableSelector civSelector, Select<String> globalFilter) {
+        Checkbox teamBonus = new Checkbox();
+        teamBonus.setLabel("Team Bonus");
+        teamBonus.setValue(container.isTeamBonus());
+        teamBonus.addValueChangeListener(event -> container.setTeamBonus(event.getValue()));
+
+        Checkbox staggered = new Checkbox();
+        staggered.setLabel("Staggered");
+        staggered.setValue(container.isStaggered());
+        staggered.addValueChangeListener(event -> {
+            container.setStaggered(event.getValue());
+            statsEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
+            costEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
+            ecoEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
+            attackEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
+            armorEffectList.getChildren().map(c -> (EffectLayout)c).forEach(e -> e.setStaggeredView(event.getValue()));
+        });
+
+        HorizontalLayout globalSettingsLayout = new HorizontalLayout(civSelector, new Label("Global Filter"), globalFilter, teamBonus, staggered);
+        globalSettingsLayout.setAlignItems(Alignment.CENTER);
+        return globalSettingsLayout;
     }
 
     private class EffectLayout extends VerticalLayout {

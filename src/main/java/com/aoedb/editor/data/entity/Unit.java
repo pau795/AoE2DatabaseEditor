@@ -12,7 +12,11 @@ public class Unit extends Item{
 
     public Unit(int id) {
         super(id);
+    }
 
+    public Unit(int id, Unit mainUnit, Unit statUnit, Unit attackUnit, Unit armorUnit, Unit upgradesUnit, Unit availabilityUnit, Unit performanceUnit, Unit bonusUnit) {
+        super(id, mainUnit, statUnit, attackUnit, armorUnit, upgradesUnit, availabilityUnit, bonusUnit);
+        this.performance =  new PerformanceContainer(performanceUnit.getPerformance());
     }
 
     @Override
@@ -33,8 +37,6 @@ public class Unit extends Item{
         if (id == 0) return "none";
         return String.format("unit_name_%d", this.id);
     }
-
-
 
     @Override
     public EditableView getEditableView(){

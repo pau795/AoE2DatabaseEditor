@@ -33,11 +33,12 @@ public class EditableSelector extends HorizontalLayout {
     private final Button deleteButton;
 
     private Editable editable;
+    private ComboBox<Editable> entitySelector;
 
     public EditableSelector(Editable editable){
 
         this.editable = editable;
-        ComboBox<Editable> entitySelector =  new ComboBox<>();
+        entitySelector =  new ComboBox<>();
         ComboBox.ItemFilter<Editable> filter = (editable1, filterString) -> editable1.getType().toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT)) || Database.getString(editable1.getName()).toLowerCase(Locale.ROOT).contains(filterString.toLowerCase(Locale.ROOT));
         entitySelector.setItems(filter, (Collection<Editable>) Database.getEditableList(editable.getType()));
         entitySelector.getElement().getStyle().set("--vaadin-combo-box-overlay-width","300px");
@@ -81,5 +82,9 @@ public class EditableSelector extends HorizontalLayout {
 
     public Editable getEditable(){
         return editable;
+    }
+
+    public void setEditable(Editable editable){
+        this.entitySelector.setValue(editable);
     }
 }

@@ -12,6 +12,11 @@ public class Trainable {
         techList = new ArrayList<>();
     }
 
+    public Trainable(Trainable other) {
+        unitList = new ArrayList<>(other.unitList);
+        techList = new ArrayList<>(other.techList);
+    }
+
     public List<Integer> getUnitList() {
         return unitList;
     }
