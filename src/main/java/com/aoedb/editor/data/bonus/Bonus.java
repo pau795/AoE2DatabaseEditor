@@ -11,6 +11,11 @@ public abstract class Bonus extends Editable {
         super(id);
     }
 
+    protected Bonus(int id, Bonus mainBonus){
+        super(id, mainBonus);
+        this.bonusEffect = new EffectContainer(mainBonus.getBonusEffect());
+    }
+
     public EffectContainer getBonusEffect() {
         return bonusEffect;
     }

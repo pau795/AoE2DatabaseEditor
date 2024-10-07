@@ -16,8 +16,16 @@ public class GatheringRates extends Editable {
         super(id);
     }
 
+    public GatheringRates(int id, GatheringRates mainGatheringRates) {
+        super(id, mainGatheringRates);
+        this.ecoID = mainGatheringRates.ecoID;
+        this.resourceIcon = mainGatheringRates.resourceIcon;
+        this.statIcon = mainGatheringRates.statIcon;
+    }
+
     @Override
     public String getName() {
+        if (id == 0) return "none";
         return String.format("gathering_rates_%d", this.id);
     }
 
@@ -53,5 +61,9 @@ public class GatheringRates extends Editable {
     @Override
     public EditableView getEditableView() {
         return new GatheringRatesView(this);
+    }
+
+    public static GatheringRates getNone(){
+        return new GatheringRates(0);
     }
 }

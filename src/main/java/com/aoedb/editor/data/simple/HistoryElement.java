@@ -10,8 +10,13 @@ public class HistoryElement extends ImageEditable{
         super(id);
     }
 
+    public HistoryElement(int id, HistoryElement mainHistoryElement) {
+        super(id, mainHistoryElement);
+    }
+
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("history_name_%d", this.id);
     }
 
@@ -25,5 +30,9 @@ public class HistoryElement extends ImageEditable{
         return new HistoryView(this);
     }
 
-
+    public static HistoryElement getNone(){
+        HistoryElement none =  new HistoryElement(0);
+        none.setImagePath("t_white");
+        return none;
+    }
 }

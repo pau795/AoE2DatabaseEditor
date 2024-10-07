@@ -12,6 +12,7 @@ public class TauntElement extends Editable{
 
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("taunt_name_%d", this.id);
     }
 
@@ -23,5 +24,9 @@ public class TauntElement extends Editable{
     @Override
     public EditableView getEditableView() {
         return new TauntView(this);
+    }
+
+    public static TauntElement getNone(){
+        return new TauntElement(0);
     }
 }

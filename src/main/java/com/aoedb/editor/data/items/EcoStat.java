@@ -14,8 +14,14 @@ public class EcoStat extends Editable {
         super(id);
     }
 
+    public EcoStat(int id, EcoStat mainEcoStat) {
+        super(id, mainEcoStat);
+        this.value = mainEcoStat.value;
+    }
+
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("eco_name_%d", this.id);
     }
 
@@ -35,5 +41,9 @@ public class EcoStat extends Editable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public static EcoStat getNone(){
+        return new EcoStat(0);
     }
 }

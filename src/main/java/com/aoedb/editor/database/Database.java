@@ -163,11 +163,11 @@ public class Database {
         ecoUpgrades = r.readEcoUpgrades();
     }
 
-    public static  String getString(String key){
+    public static String getString(String key){
         return stringData.getString(key, currentLanguage);
     }
 
-    public static  String getString(String key, String language){
+    public static String getString(String key, String language){
         return stringData.getString(key, language);
     }
 
@@ -175,24 +175,24 @@ public class Database {
         stringData.setString(key, string, language);
     }
 
-    public static  String getImage(String imageName){
+    public static String getImage(String imageName){
         if (imageName.startsWith("g_")) return "images/"+imageName+".gif";
         else return "images/"+imageName+".png";
     }
 
 
-    public static  String getSound(String soundName, String language){
+    public static String getSound(String soundName, String language){
         if (soundName.startsWith("t_")) return "sound/"+language+"/" + soundName +".ogg";
         else return "sound/en/" + soundName +".ogg";
     }
 
 
-    public static  Unit getUnit(int id){
+    public static Unit getUnit(int id){
         if (id == 0) return Unit.getNone();
         return unitList.get(id - 1);
     }
 
-    public static  Building getBuilding(int id){
+    public static Building getBuilding(int id){
         if (id == 0) return Building.getNone();
         return buildingList.get(id - 1);
     }
@@ -203,49 +203,57 @@ public class Database {
         return techList.get(id - 1);
     }
 
-    public static  Civilization getCivilization(int id){
+    public static Civilization getCivilization(int id){
         if (id == 0) return Civilization.getNone();
         return civList.get(id - 1);
     }
 
-    public static  ClassElement getClass(int id){
+    public static ClassElement getClass(int id){
+        if (id == 0) return ClassElement.getNone();
         return classList.get(id - 1);
     }
 
-    public static  TypeElement getType(int id){
+    public static TypeElement getType(int id){
+        if (id == 0) return TypeElement.getNone();
         return typeList.get(id - 1);
     }
 
-    public static  PerformanceElement getPerformance(int id){
+    public static PerformanceElement getPerformance(int id){
+        if (id == 0) return PerformanceElement.getNone();
         return performanceList.get(id - 1);
     }
 
-    public static  HistoryElement getHistory(int id){
+    public static HistoryElement getHistory(int id){
+        if (id == 0) return HistoryElement.getNone();
         return historyList.get(id - 1);
     }
 
-    public static  TauntElement getTaunt(int id){
+    public static TauntElement getTaunt(int id){
+        if (id == 0) return TauntElement.getNone();
         return tauntList.get(id - 1);
     }
 
-    public static  Stat getStat(int id){
+    public static Stat getStat(int id){
+        if (id == 0) return Stat.getNone();
         return statList.get(id - 1);
     }
 
-    public static  EcoStat getEcoStat(int id){
+    public static EcoStat getEcoStat(int id){
+        if (id == 0) return EcoStat.getNone();
         return ecoStatsList.get(id - 1);
     }
 
-    public static  GatheringRates getGatheringRates(int id){
+    public static GatheringRates getGatheringRates(int id){
+        if (id == 0) return GatheringRates.getNone();
         return gatheringRates.get(id - 1);
     }
 
-    public static  CivBonus getBonus(int id){
+    public static CivBonus getBonus(int id){
         if (id == 0) return CivBonus.getNone();
         return bonusList.get(id - 1);
     }
 
-    public static  HiddenBonus getHiddenBonus(int id){
+    public static HiddenBonus getHiddenBonus(int id){
         if (id == 0) return HiddenBonus.getNone();
         return hiddenBonusList.get(id - 1);
     }
@@ -272,15 +280,51 @@ public class Database {
                 list1.add(Technology.getDarkAge());
                 return list1;
             }
-            case Database.CIV: return civList;
-            case Database.CLASS: return classList;
-            case Database.TYPE: return typeList;
-            case Database.PERFORMANCE: return performanceList;
-            case Database.TAUNT: return tauntList;
-            case Database.HISTORY: return historyList;
-            case Database.STAT: return statList;
-            case Database.ECO_STAT: return ecoStatsList;
-            case Database.GATHERING_RATES: return gatheringRates;
+            case Database.CIV: {
+                List<Civilization> list1 = new ArrayList<>(civList);
+                list1.add(Civilization.getNone());
+                return list1;
+            }
+            case Database.CLASS: {
+                List<ClassElement> list1 = new ArrayList<>(classList);
+                list1.add(ClassElement.getNone());
+                return list1;
+            }
+            case Database.TYPE: {
+                List<TypeElement> list1 = new ArrayList<>(typeList);
+                list1.add(TypeElement.getNone());
+                return list1;
+            }
+            case Database.PERFORMANCE: {
+                List<PerformanceElement> list1 = new ArrayList<>(performanceList);
+                list1.add(PerformanceElement.getNone());
+                return list1;
+            }
+            case Database.TAUNT: {
+                List<TauntElement> list1 = new ArrayList<>(tauntList);
+                list1.add(TauntElement.getNone());
+                return list1;
+            }
+            case Database.HISTORY: {
+                List<HistoryElement> list1 = new ArrayList<>(historyList);
+                list1.add(HistoryElement.getNone());
+                return list1;
+            }
+            case Database.STAT: {
+                List<Stat> list1 = new ArrayList<>(statList);
+                list1.add(Stat.getNone());
+                return list1;
+            }
+            case Database.ECO_STAT: {
+                List<EcoStat> list1 = new ArrayList<>(ecoStatsList);
+                list1.add(EcoStat.getNone());
+                return list1;
+            }
+            case Database.GATHERING_RATES: {
+                List<GatheringRates> list1 = new ArrayList<>(gatheringRates);
+                list1.add(GatheringRates.getNone());
+                return list1;
+            }
             case Database.BONUS: {
                 List<CivBonus> list1 = new ArrayList<>(bonusList);
                 list1.add(CivBonus.getNone());
@@ -318,13 +362,34 @@ public class Database {
                 if (id == 0) return ClassElement.getNone();
                 return classList.get(id - 1);
             }
-            case Database.TYPE: return typeList.get(id - 1);
-            case Database.PERFORMANCE: return performanceList.get(id - 1);
-            case Database.TAUNT: return tauntList.get(id - 1);
-            case Database.HISTORY: return historyList.get(id - 1);
-            case Database.STAT: return statList.get(id - 1);
-            case Database.ECO_STAT: return ecoStatsList.get(id - 1);
-            case Database.GATHERING_RATES: return gatheringRates.get(id - 1);
+            case Database.TYPE: {
+                if (id == 0) return TypeElement.getNone();
+                return typeList.get(id - 1);
+            }
+            case Database.PERFORMANCE: {
+                if (id == 0) return PerformanceElement.getNone();
+                return performanceList.get(id - 1);
+            }
+            case Database.TAUNT: {
+                if (id == 0) return TauntElement.getNone();
+                return tauntList.get(id - 1);
+            }
+            case Database.HISTORY: {
+                if (id == 0) return HistoryElement.getNone();
+                return historyList.get(id - 1);
+            }
+            case Database.STAT: {
+                if (id == 0) return Stat.getNone();
+                return statList.get(id - 1);
+            }
+            case Database.ECO_STAT: {
+                if (id == 0) return EcoStat.getNone();
+                return ecoStatsList.get(id - 1);
+            }
+            case Database.GATHERING_RATES: {
+                if (id == 0) return GatheringRates.getNone();
+                return gatheringRates.get(id - 1);
+            }
             case Database.BONUS: {
                 if (id == 0) return CivBonus.getNone();
                 return bonusList.get(id - 1);
@@ -333,12 +398,12 @@ public class Database {
                 if (id == 0) return HiddenBonus.getNone();
                 return hiddenBonusList.get(id - 1);
             }
-            default:  return Unit.getNone();
+            default: return Unit.getNone();
         }
     }
 
 
-    public static  GroupContainer getGroup(String type) {
+    public static GroupContainer getGroup(String type) {
         switch (type){
             case Database.BUILDING_GROUPS: return buildingGroups;
             case Database.UNIT_GROUPS: return unitGroups;
@@ -410,7 +475,7 @@ public class Database {
         return hiddenBonusList;
     }
 
-    public static  List<Editable> getAllEditables(){
+    public static List<Editable> getAllEditables(){
         List<Editable> list = new ArrayList<>();
         list.addAll(unitList);
         list.addAll(buildingList);
@@ -429,15 +494,15 @@ public class Database {
         return list;
     }
 
-    public static  TechTreeQuizQuestions getTechTreeQuizQuestions() {
+    public static TechTreeQuizQuestions getTechTreeQuizQuestions() {
         return techTreeQuizQuestions;
     }
 
-    public static  EcoUpgrades getEcoUpgrades(){
+    public static EcoUpgrades getEcoUpgrades(){
         return ecoUpgrades;
     }
 
-    public static  List<String> getImageNamesList() {
+    public static List<String> getImageNamesList() {
         try {
             String path = "META-INF/resources/images";
             PathMatchingResourcePatternResolver scanner = new PathMatchingResourcePatternResolver();

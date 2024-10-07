@@ -13,8 +13,14 @@ public class Stat extends Editable {
         super(id);
     }
 
+    public Stat(int id, Stat mainStat) {
+        super(id, mainStat);
+        this.addition = mainStat.addition;
+    }
+
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("stat_name_%d", this.id);
     }
 
@@ -34,5 +40,9 @@ public class Stat extends Editable {
     @Override
     public EditableView getEditableView() {
         return new StatView(this);
+    }
+
+    public static Stat getNone(){
+        return new Stat(0);
     }
 }

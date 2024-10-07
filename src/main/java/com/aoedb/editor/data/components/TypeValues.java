@@ -72,10 +72,7 @@ public class TypeValues {
 
     public TypeValues(TypeValues other){
         this.typeLists = new ArrayList<>();
-        for(TypeList tl : other.typeLists){
-            TypeList newTl = new TypeList(tl);
-            this.typeLists.add(newTl);
-        }
+        for(TypeList tl : other.typeLists) this.typeLists.add(new TypeList(tl));
     }
 
     public List<TypeList> getTypeLists() {

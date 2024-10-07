@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class NewTechView extends NewEditableView {
+public class NewTechnologyView extends NewEditableView {
     private final EditableSelector mainSelector;
     private final EditableSelector statSelector;
     private final EditableSelector upgradesSelector;
@@ -25,15 +25,15 @@ public class NewTechView extends NewEditableView {
     private final Button createButton;
 
 
-    public NewTechView(Dialog dialog){
+    public NewTechnologyView(Dialog dialog){
         super(dialog);
 
-        this.mainSelector = new EditableSelector(Unit.getNone());
-        this.statSelector = new EditableSelector(Unit.getNone());
-        this.upgradesSelector = new EditableSelector(Unit.getNone());
-        this.effectSelector = new EditableSelector(Unit.getNone());
-        this.availabilitySelector = new EditableSelector(Unit.getNone());
-        this.bonusSelector = new EditableSelector(Unit.getNone());
+        this.mainSelector = new EditableSelector(Technology.getNone());
+        this.statSelector = new EditableSelector(Technology.getNone());
+        this.upgradesSelector = new EditableSelector(Technology.getNone());
+        this.effectSelector = new EditableSelector(Technology.getNone());
+        this.availabilitySelector = new EditableSelector(Technology.getNone());
+        this.bonusSelector = new EditableSelector(Technology.getNone());
 
         this.createButton = new Button("Create");
         this.createButton.addClassNames("new-editable-button");
@@ -41,13 +41,13 @@ public class NewTechView extends NewEditableView {
         this.createButton.addClickListener(event -> this.createNewEditable());
 
         this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(Technology.getNone()));
-        this.mainSelector.setEditableChangedListener(unit -> {
-            this.statSelector.setEditable(unit);
-            this.upgradesSelector.setEditable(unit);
-            this.availabilitySelector.setEditable(unit);
-            this.effectSelector.setEditable(unit);
-            this.bonusSelector.setEditable(unit);
-            if (unit.getId() != 0) this.createButton.setEnabled(true);
+        this.mainSelector.setEditableChangedListener(tech -> {
+            this.statSelector.setEditable(tech);
+            this.upgradesSelector.setEditable(tech);
+            this.availabilitySelector.setEditable(tech);
+            this.effectSelector.setEditable(tech);
+            this.bonusSelector.setEditable(tech);
+            if (tech.getId() != 0) this.createButton.setEnabled(true);
         });
     }
 
@@ -79,7 +79,7 @@ public class NewTechView extends NewEditableView {
         Technology effectTech = (Technology) this.effectSelector.getEditable();
         Technology bonusTech = (Technology) this.bonusSelector.getEditable();
 
-        Technology newTechnology = new Technology(Database.getUnitList().size() + 1, mainTech, statTech, upgradesTech, availabilityTech, bonusTech);
+        Technology newTechnology = new Technology(Database.getTechList().size() + 1, mainTech, statTech, upgradesTech, availabilityTech, effectTech, bonusTech);
         Database.getTechList().add(newTechnology);
         Map<String, String> params = new HashMap<>();
         params.put("type", newTechnology.getType());

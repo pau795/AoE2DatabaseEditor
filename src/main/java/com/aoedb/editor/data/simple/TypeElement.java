@@ -15,6 +15,7 @@ public class TypeElement extends ImageEditable {
 
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("type_name_%d", this.id);
     }
 
@@ -26,6 +27,12 @@ public class TypeElement extends ImageEditable {
     @Override
     public EditableView getEditableView() {
         return new TypeView(this);
+    }
+
+    public static TypeElement getNone(){
+        TypeElement none =  new TypeElement(0);
+        none.setImagePath("t_white");
+        return none;
     }
 
 }

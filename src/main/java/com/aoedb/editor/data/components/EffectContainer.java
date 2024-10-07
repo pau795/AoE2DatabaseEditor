@@ -41,6 +41,23 @@ public class EffectContainer {
             this.setFilterEntitiesIDs(new ArrayList<>());
         }
 
+        public EffectItem(EffectItem other){
+            this.filter = other.filter;
+            this.techRequirement = other.techRequirement;
+            this.affectsSecondaryProjectile = other.affectsSecondaryProjectile;
+            this.filterEntitiesIDs = new ArrayList<>(other.filterEntitiesIDs);
+            this.statID = other.statID;
+            this.operator = other.operator;
+            this.staggered = other.staggered;
+            this.singleValue = other.singleValue;
+            this.staggeredValues = new Double[] {
+                other.staggeredValues[0],
+                other.staggeredValues[1],
+                other.staggeredValues[2],
+                other.staggeredValues[3]
+            };
+        }
+
         public String getFilter() {
             return filter;
         }
@@ -153,6 +170,27 @@ public class EffectContainer {
     private List<EffectItem> ecoEffects;
     private List<EffectItem> attackEffects;
     private List<EffectItem> armorEffects;
+
+    public EffectContainer(){}
+
+    public EffectContainer(EffectContainer other){
+        this.civID = other.civID;
+        this.teamBonus = other.teamBonus;
+        this. globalFilter = other.globalFilter;
+        this.staggered = other.staggered;
+
+        this.statsEffects = new ArrayList<>();
+        this.costEffects = new ArrayList<>();
+        this.ecoEffects = new ArrayList<>();
+        this.attackEffects = new ArrayList<>();
+        this.armorEffects = new ArrayList<>();
+
+        for (EffectItem effect : other.statsEffects) this.statsEffects.add(new EffectItem(effect));
+        for (EffectItem effect : other.costEffects) this.costEffects.add(new EffectItem(effect));
+        for (EffectItem effect : other.ecoEffects) this.ecoEffects.add(new EffectItem(effect));
+        for (EffectItem effect : other.attackEffects) this.attackEffects.add(new EffectItem(effect));
+        for (EffectItem effect : other.armorEffects) this.armorEffects.add(new EffectItem(effect));
+    }
 
     public int getCivID() {
         return civID;

@@ -2,7 +2,6 @@ package com.aoedb.editor.create;
 
 import com.aoedb.editor.database.Database;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -59,18 +58,18 @@ public class AddEditableView extends Dialog {
         switch (type){
             case Database.UNIT: return new NewUnitView(this).getView();
             case Database.BUILDING: return new NewBuildingView(this).getView();
-//            case Database.TECH: return new NewTechnologyView();
-//            case Database.CIV: return new NewCivilizationView();
-//            case Database.CLASS: return new NewClassView();
-//            case Database.TYPE: return new NewTypeView();
-//            case Database.PERFORMANCE: return new NewPerformanceView();
-//            case Database.TAUNT: return new NewTauntView();
-//            case Database.HISTORY: return new NewHistoryView();
-//            case Database.STAT: return new NewStatView();
-//            case Database.ECO_STAT: return new NewEcoStatView();
-//            case Database.GATHERING_RATES: return new NewGatheringRatesView();
-//            case Database.BONUS: return new NewBonusView();
-//            case Database.HIDDEN_BONUS: return new NewHiddenBonusView();
+            case Database.TECH: return new NewTechnologyView(this).getView();
+//            case Database.CIV: return new NewCivilizationView(this).getView();
+//            case Database.CLASS: return new NewClassView(this).getView();
+//            case Database.TYPE: return new NewTypeView(this).getView();
+//            case Database.PERFORMANCE: return new NewPerformanceView(this).getView();
+//            case Database.TAUNT: return new NewTauntView(this).getView();
+            case Database.HISTORY: return new NewHistoryView(this).getView();
+            case Database.STAT: return new NewStatView(this).getView();
+            case Database.ECO_STAT: return new NewEcoStatView(this).getView();
+            case Database.GATHERING_RATES: return new NewGatheringRatesView(this).getView();
+            case Database.BONUS: return new NewCivBonusView(this).getView();
+            case Database.HIDDEN_BONUS: return new NewHiddenBonusView(this).getView();
             default: return new Div();
         }
     }

@@ -11,6 +11,12 @@ public class CivBonus extends Bonus{
         super(id);
     }
 
+    public CivBonus(int id, CivBonus mainBonus){
+        super(id, mainBonus);
+        Database.setString(this.getBonusItemPattern(), Database.getString(mainBonus.getBonusItemPattern(), "en"), "en");
+        Database.setString(this.getBonusItemPattern(), Database.getString(mainBonus.getBonusItemPattern(), "es"), "es");
+    }
+
     public String getName() {
         if (id == 0) return "none";
         return String.format("bonus_tech_tree_description_%d", this.id);

@@ -42,6 +42,7 @@ public class Unit extends Item{
     public EditableView getEditableView(){
         return new UnitView(this);
     }
+
     @Override
     public String getCreatorType(){
         return Database.BUILDING;

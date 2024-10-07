@@ -13,6 +13,7 @@ public class PerformanceElement extends ImageEditable{
 
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("performance_name_%d", this.id);
     }
 
@@ -24,5 +25,11 @@ public class PerformanceElement extends ImageEditable{
     @Override
     public EditableView getEditableView() {
         return new PerformanceView(this);
+    }
+
+    public static PerformanceElement getNone(){
+        PerformanceElement none =  new PerformanceElement(0);
+        none.setImagePath("t_white");
+        return none;
     }
 }

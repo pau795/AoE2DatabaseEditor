@@ -14,6 +14,12 @@ public class Technology extends Entity {
         super(id);
     }
 
+    public Technology(int id, Technology mainTech, Technology statTech, Technology upgradesTech,
+                      Technology availabilityTech, Technology effectTech, Technology bonusTech) {
+        super(id, mainTech, statTech, availabilityTech, upgradesTech, bonusTech);
+        this.techEffect = new EffectContainer(effectTech.getTechEffect());
+    }
+
     @Override
     public String getName() {
         if (id == 0) return "none";

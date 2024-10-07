@@ -13,6 +13,7 @@ public class ClassElement extends ImageEditable{
 
     @Override
     public String getName(){
+        if (id == 0) return "none";
         return String.format("class_name_%d", this.id);
     }
 

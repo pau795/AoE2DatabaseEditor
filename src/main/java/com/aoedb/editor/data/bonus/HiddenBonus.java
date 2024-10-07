@@ -10,6 +10,10 @@ public class HiddenBonus extends Bonus{
         super(id);
     }
 
+    public HiddenBonus(int id, HiddenBonus mainBonus){
+        super(id, mainBonus);
+    }
+
     @Override
     public String getName() {
         if (id == 0) return "none";
