@@ -1,7 +1,6 @@
-package com.aoedb.editor.create;
+package com.aoedb.editor.views.create;
 
 import com.aoedb.editor.data.items.EcoStat;
-import com.aoedb.editor.data.items.Stat;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.editors.EditableSelector;
 import com.aoedb.editor.views.pages.EditEditableView;
@@ -15,21 +14,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class NewStatView extends NewEditableView {
+public class NewEcoStatView extends NewEditableView {
     private final EditableSelector mainSelector;
     private final Button createButton;
 
 
-    public NewStatView(Dialog dialog){
+    public NewEcoStatView(Dialog dialog){
         super(dialog);
-        this.mainSelector = new EditableSelector(Stat.getNone());
+        this.mainSelector = new EditableSelector(EcoStat.getNone());
 
         this.createButton = new Button("Create");
         this.createButton.addClassNames("new-editable-button");
         this.createButton.setEnabled(false);
         this.createButton.addClickListener(event -> this.createNewEditable());
 
-        this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(Stat.getNone()));
+        this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(EcoStat.getNone()));
         this.mainSelector.setEditableChangedListener(bonus -> {
             if (bonus.getId() != 0) this.createButton.setEnabled(true);
         });
@@ -41,19 +40,19 @@ public class NewStatView extends NewEditableView {
         layout.setSpacing(false);
         Div grid = new Div();
         grid.addClassNames("new-editable-grid");
-        grid.add(getEntitySelectorTarget("Main Stat", mainSelector));
+        grid.add(getEntitySelectorTarget("Main Eco Stat", mainSelector));
         layout.add(grid, createButton);
         return layout;
     }
 
     public void createNewEditable(){
         this.dialog.close();
-        Stat mainStat = (Stat) this.mainSelector.getEditable();
-        Stat newStat = new Stat(Database.getStatList().size() + 1, mainStat);
-        Database.getStatList().add(newStat);
+        EcoStat mainEcoStat = (EcoStat) this.mainSelector.getEditable();
+        EcoStat newEcoStat = new EcoStat(Database.getEcoStatsList().size() + 1, mainEcoStat);
+        Database.getEcoStatsList().add(newEcoStat);
         Map<String, String> params = new HashMap<>();
-        params.put("type", newStat.getType());
-        params.put("id", String.valueOf(newStat.getId()));
+        params.put("type", newEcoStat.getType());
+        params.put("id", String.valueOf(newEcoStat.getId()));
         this.createButton.getUI().ifPresent(ui -> ui.navigate(EditEditableView.class, new RouteParameters(params)));
     }
 }

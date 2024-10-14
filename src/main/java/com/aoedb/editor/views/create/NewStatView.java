@@ -1,7 +1,6 @@
-package com.aoedb.editor.create;
+package com.aoedb.editor.views.create;
 
-import com.aoedb.editor.data.bonus.CivBonus;
-import com.aoedb.editor.data.simple.HistoryElement;
+import com.aoedb.editor.data.items.Stat;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.editors.EditableSelector;
 import com.aoedb.editor.views.pages.EditEditableView;
@@ -15,22 +14,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class NewHistoryView extends NewEditableView {
+public class NewStatView extends NewEditableView {
     private final EditableSelector mainSelector;
     private final Button createButton;
 
 
-    public NewHistoryView(Dialog dialog){
+    public NewStatView(Dialog dialog){
         super(dialog);
-
-        this.mainSelector = new EditableSelector(HistoryElement.getNone());
+        this.mainSelector = new EditableSelector(Stat.getNone());
 
         this.createButton = new Button("Create");
         this.createButton.addClassNames("new-editable-button");
         this.createButton.setEnabled(false);
         this.createButton.addClickListener(event -> this.createNewEditable());
 
-        this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(HistoryElement.getNone()));
+        this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(Stat.getNone()));
         this.mainSelector.setEditableChangedListener(bonus -> {
             if (bonus.getId() != 0) this.createButton.setEnabled(true);
         });
@@ -42,21 +40,19 @@ public class NewHistoryView extends NewEditableView {
         layout.setSpacing(false);
         Div grid = new Div();
         grid.addClassNames("new-editable-grid");
-        grid.add(getEntitySelectorTarget("Main History", mainSelector));
+        grid.add(getEntitySelectorTarget("Main Stat", mainSelector));
         layout.add(grid, createButton);
         return layout;
     }
 
-
-
     public void createNewEditable(){
         this.dialog.close();
-        HistoryElement mainHistory = (HistoryElement) this.mainSelector.getEditable();
-        HistoryElement newHistory = new HistoryElement(Database.getHistoryList().size() + 1, mainHistory);
-        Database.getHistoryList().add(newHistory);
+        Stat mainStat = (Stat) this.mainSelector.getEditable();
+        Stat newStat = new Stat(Database.getStatList().size() + 1, mainStat);
+        Database.getStatList().add(newStat);
         Map<String, String> params = new HashMap<>();
-        params.put("type", newHistory.getType());
-        params.put("id", String.valueOf(newHistory.getId()));
+        params.put("type", newStat.getType());
+        params.put("id", String.valueOf(newStat.getId()));
         this.createButton.getUI().ifPresent(ui -> ui.navigate(EditEditableView.class, new RouteParameters(params)));
     }
 }

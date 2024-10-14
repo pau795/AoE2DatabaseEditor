@@ -1,4 +1,4 @@
-package com.aoedb.editor.create;
+package com.aoedb.editor.views.create;
 import com.aoedb.editor.views.editors.EditableSelector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dialog.Dialog;

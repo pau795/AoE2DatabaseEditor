@@ -1,8 +1,6 @@
-package com.aoedb.editor.create;
+package com.aoedb.editor.views.create;
 
 import com.aoedb.editor.data.bonus.CivBonus;
-import com.aoedb.editor.data.bonus.HiddenBonus;
-import com.aoedb.editor.data.entity.Technology;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.editors.EditableSelector;
 import com.aoedb.editor.views.pages.EditEditableView;
@@ -16,22 +14,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class NewHiddenBonusView extends NewEditableView {
+public class NewCivBonusView extends NewEditableView {
     private final EditableSelector mainSelector;
     private final Button createButton;
 
 
-    public NewHiddenBonusView(Dialog dialog){
+    public NewCivBonusView(Dialog dialog){
         super(dialog);
 
-        this.mainSelector = new EditableSelector(HiddenBonus.getNone());
+        this.mainSelector = new EditableSelector(CivBonus.getNone());
 
         this.createButton = new Button("Create");
         this.createButton.addClassNames("new-editable-button");
         this.createButton.setEnabled(false);
         this.createButton.addClickListener(event -> this.createNewEditable());
 
-        this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(HiddenBonus.getNone()));
+        this.dialog.addDialogCloseActionListener(event -> this.mainSelector.setEditable(CivBonus.getNone()));
         this.mainSelector.setEditableChangedListener(bonus -> {
             if (bonus.getId() != 0) this.createButton.setEnabled(true);
         });
@@ -43,7 +41,7 @@ public class NewHiddenBonusView extends NewEditableView {
         layout.setSpacing(false);
         Div grid = new Div();
         grid.addClassNames("new-editable-grid");
-        grid.add(getEntitySelectorTarget("Main Hidden Bonus", mainSelector));
+        grid.add(getEntitySelectorTarget("Main bonus", mainSelector));
         layout.add(grid, createButton);
         return layout;
     }
@@ -52,9 +50,9 @@ public class NewHiddenBonusView extends NewEditableView {
 
     public void createNewEditable(){
         this.dialog.close();
-        HiddenBonus mainBonus = (HiddenBonus) this.mainSelector.getEditable();
-        HiddenBonus newBonus = new HiddenBonus(Database.getHiddenBonusList().size() + 1, mainBonus);
-        Database.getHiddenBonusList().add(newBonus);
+        CivBonus mainBonus = (CivBonus) this.mainSelector.getEditable();
+        CivBonus newBonus = new CivBonus(Database.getBonusList().size() + 1, mainBonus);
+        Database.getBonusList().add(newBonus);
         Map<String, String> params = new HashMap<>();
         params.put("type", newBonus.getType());
         params.put("id", String.valueOf(newBonus.getId()));

@@ -1,4 +1,4 @@
-package com.aoedb.editor.create;
+package com.aoedb.editor.views.create;
 
 import com.aoedb.editor.data.entity.Building;
 import com.aoedb.editor.data.entity.Unit;

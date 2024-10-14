@@ -1,10 +1,8 @@
 package com.aoedb.editor.views.pages;
 
-import com.aoedb.editor.create.AddEditableView;
+import com.aoedb.editor.views.create.AddEditableView;
 import com.aoedb.editor.views.MainLayout;
-import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;

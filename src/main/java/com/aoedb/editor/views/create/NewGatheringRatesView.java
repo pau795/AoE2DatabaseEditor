@@ -1,7 +1,5 @@
-package com.aoedb.editor.create;
+package com.aoedb.editor.views.create;
 
-import com.aoedb.editor.data.bonus.HiddenBonus;
-import com.aoedb.editor.data.entity.Technology;
 import com.aoedb.editor.data.items.GatheringRates;
 import com.aoedb.editor.database.Database;
 import com.aoedb.editor.views.editors.EditableSelector;
